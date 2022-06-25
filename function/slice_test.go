@@ -82,4 +82,13 @@ func TestSliceUnique(t *testing.T) {
 	if actual := SliceUnique(testBoolSlice.slice); len(actual) != len(testBoolSlice.result) {
 		t.Error("SliceUnique() error.")
 	}
+	testIntSlice := struct {
+		slice, result []int
+	}{
+		[]int{1, 3, 5, 3, 2, 6, 7, 9, 0, 4, 6, 8, 3, 2, 1, 0},
+		[]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+	}
+	if actual := SliceUnique(testIntSlice.slice); len(actual) != len(testIntSlice.result) {
+		t.Error("SliceUnique() error.")
+	}
 }
