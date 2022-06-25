@@ -37,3 +37,13 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 	}
 	return sum
 }
+
+// IndexOfSlice 返回元素所在切片的下标
+func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
+	for k, v := range slice {
+		if v == target {
+			return k, true
+		}
+	}
+	return
+}

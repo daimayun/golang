@@ -135,3 +135,32 @@ func TestSliceSum(t *testing.T) {
 		t.Error("SliceSum() error.")
 	}
 }
+
+func TestIndexOfSlice(t *testing.T) {
+	TestIntSlice := struct {
+		slice          []int
+		target, result int
+		ok             bool
+	}{
+		[]int{1, 3, 5, 100},
+		3,
+		1,
+		true,
+	}
+	if actualResult, actualOk := IndexOfSlice(TestIntSlice.slice, TestIntSlice.target); actualResult != TestIntSlice.result || actualOk != TestIntSlice.ok {
+		t.Error("IndexOfSlice() error.")
+	}
+	TestIntSlice = struct {
+		slice          []int
+		target, result int
+		ok             bool
+	}{
+		[]int{1, 3, 5, 100},
+		100,
+		3,
+		true,
+	}
+	if actualResult, actualOk := IndexOfSlice(TestIntSlice.slice, TestIntSlice.target); actualResult != TestIntSlice.result || actualOk != TestIntSlice.ok {
+		t.Error("IndexOfSlice() error.")
+	}
+}
