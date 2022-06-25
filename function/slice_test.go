@@ -92,3 +92,46 @@ func TestSliceUnique(t *testing.T) {
 		t.Error("SliceUnique() error.")
 	}
 }
+
+func TestSliceSum(t *testing.T) {
+	TestIntSlice := struct {
+		slice  []int
+		result int
+	}{
+		[]int{1, 3, 5, 100},
+		109,
+	}
+	if actual := SliceSum(TestIntSlice.slice); actual != TestIntSlice.result {
+		t.Error("SliceSum() error.")
+	}
+	TestIntSlice = struct {
+		slice  []int
+		result int
+	}{
+		[]int{1, -3, 5, 100},
+		103,
+	}
+	if actual := SliceSum(TestIntSlice.slice); actual != TestIntSlice.result {
+		t.Error("SliceSum() error.")
+	}
+	TestIntFloat := struct {
+		slice  []float64
+		result float64
+	}{
+		[]float64{1, 3, 5, 100.99},
+		109.99,
+	}
+	if actual := SliceSum(TestIntFloat.slice); actual != TestIntFloat.result {
+		t.Error("SliceSum() error.")
+	}
+	TestIntFloat = struct {
+		slice  []float64
+		result float64
+	}{
+		[]float64{-1, 3, 5, 100.99},
+		107.99,
+	}
+	if actual := SliceSum(TestIntFloat.slice); actual != TestIntFloat.result {
+		t.Error("SliceSum() error.")
+	}
+}
