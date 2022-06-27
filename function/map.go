@@ -33,3 +33,32 @@ func MapValueExists[Key, Val comparable](m map[Key]Val, value Val) (key Key, ok 
 	}
 	return
 }
+
+// MapMerge 两个MAP合并[php:array_merge]
+func MapMerge[Key comparable, Val any](map1, map2 map[Key]Val) map[Key]Val {
+	m := make(map[Key]Val)
+	for i, v := range map1 {
+		for j, w := range map2 {
+			if i == j {
+				m[i] = w
+			} else {
+				if _, ok := m[i]; !ok {
+					m[i] = v
+				}
+				if _, ok := m[j]; !ok {
+					m[j] = w
+				}
+			}
+		}
+	}
+	return m
+}
+
+// MapSum MAP的VALUE求和[php:array_sum]
+func MapSum[Key comparable, Val int | int8 | int32 | int64 | float32 | float64](m map[Key]Val) Val {
+	var sum Val = 0
+	for _, v := range m {
+		sum += v
+	}
+	return sum
+}
