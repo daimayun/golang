@@ -108,6 +108,19 @@ func TestMapValueExists(t *testing.T) {
 	}
 }
 
+func TestMapMerge(t *testing.T) {
+	testMap := struct {
+		m1, m2, result map[string]string
+	}{
+		map[string]string{"a": "one", "c": "three", "b": "2"},
+		map[string]string{"b": "two", "d": "four", "e": "five"},
+		map[string]string{"a": "one", "b": "two", "c": "three", "d": "four", "e": "five"},
+	}
+	if actual := MapMerge(testMap.m1, testMap.m2); MapIsEqual(actual, testMap.result) == false {
+		t.Error("MapMerge() error.")
+	}
+}
+
 func TestMapSum(t *testing.T) {
 	testMap := struct {
 		m   map[string]int

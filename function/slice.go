@@ -60,3 +60,19 @@ func ValueOfSlice[T any](slice []T, index int) (val T, ok bool) {
 func FirstAndLastValueOfSlice[T any](slice []T) (T, T) {
 	return slice[0], slice[len(slice)-1]
 }
+
+// SliceIsEqual 判断两个切片是否相等[长度、容量、元素、顺序]
+func SliceIsEqual[T comparable](s1, s2 []T) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	if cap(s1) != cap(s2) {
+		return false
+	}
+	for k, v := range s1 {
+		if s2[k] != v {
+			return false
+		}
+	}
+	return true
+}

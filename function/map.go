@@ -62,3 +62,17 @@ func MapSum[Key comparable, Val int | int8 | int32 | int64 | float32 | float64](
 	}
 	return sum
 }
+
+// MapIsEqual 判断两个MAP是否相等[长度、KEY、Value]
+func MapIsEqual[T comparable](m1, m2 map[T]T) bool {
+	if len(m1) != len(m2) {
+		return false
+	}
+	for k, v := range m1 {
+		val, ok := m2[k]
+		if !ok || v != val {
+			return false
+		}
+	}
+	return true
+}
