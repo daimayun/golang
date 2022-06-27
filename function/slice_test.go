@@ -163,4 +163,32 @@ func TestIndexOfSlice(t *testing.T) {
 	if actualResult, actualOk := IndexOfSlice(TestIntSlice.slice, TestIntSlice.target); actualResult != TestIntSlice.result || actualOk != TestIntSlice.ok {
 		t.Error("IndexOfSlice() error.")
 	}
+	TestStringSlice := struct {
+		slice  []string
+		target string
+		result int
+		ok     bool
+	}{
+		[]string{"a", "b", "c", "d", "100"},
+		"c",
+		2,
+		true,
+	}
+	if actualResult, actualOk := IndexOfSlice(TestStringSlice.slice, TestStringSlice.target); actualResult != TestStringSlice.result || actualOk != TestStringSlice.ok {
+		t.Error("IndexOfSlice() error.")
+	}
+	TestStringSlice = struct {
+		slice  []string
+		target string
+		result int
+		ok     bool
+	}{
+		[]string{"a", "b", "c", "d", "100"},
+		"100",
+		4,
+		true,
+	}
+	if actualResult, actualOk := IndexOfSlice(TestStringSlice.slice, TestStringSlice.target); actualResult != TestStringSlice.result || actualOk != TestStringSlice.ok {
+		t.Error("IndexOfSlice() error.")
+	}
 }
