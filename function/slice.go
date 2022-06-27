@@ -38,6 +38,11 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 	return sum
 }
 
+// SliceDiff 两个切片之间的差集[php:array_diff]
+func SliceDiff() {
+	//
+}
+
 // IndexOfSlice 返回元素所在切片中的下标
 func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
 	for k, v := range slice {

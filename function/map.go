@@ -63,6 +63,11 @@ func MapSum[Key comparable, Val int | int8 | int32 | int64 | float32 | float64](
 	return sum
 }
 
+// MapDiff 两个MAP之间的差集[php:array_diff]
+func MapDiff() {
+	//
+}
+
 // MapIsEqual 判断两个MAP是否相等[长度、KEY、Value]
 func MapIsEqual[T comparable](m1, m2 map[T]T) bool {
 	if len(m1) != len(m2) {
