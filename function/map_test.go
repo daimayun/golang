@@ -77,3 +77,33 @@ func TestMapKeyExists(t *testing.T) {
 		t.Error("MapKeyExists() error.")
 	}
 }
+
+func TestMapValueExists(t *testing.T) {
+	testMap := struct {
+		m          map[string]string
+		key, value string
+		ok         bool
+	}{
+		map[string]string{"a": "one", "b": "two", "c": "three"},
+		"a",
+		"one",
+		true,
+	}
+	if actualKey, actualOk := MapValueExists(testMap.m, testMap.value); actualKey != testMap.key || actualOk != testMap.ok {
+		t.Error("MapValueExists() error.")
+	}
+	testIntMap := struct {
+		m     map[string]int
+		key   string
+		value int
+		ok    bool
+	}{
+		map[string]int{"aa": 1, "bb": 2, "cc": 3},
+		"cc",
+		3,
+		true,
+	}
+	if actualKey, actualOk := MapValueExists(testIntMap.m, testIntMap.value); actualKey != testIntMap.key || actualOk != testIntMap.ok {
+		t.Error("MapValueExists() error.")
+	}
+}
