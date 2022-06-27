@@ -107,3 +107,26 @@ func TestMapValueExists(t *testing.T) {
 		t.Error("MapValueExists() error.")
 	}
 }
+
+func TestMapSum(t *testing.T) {
+	testMap := struct {
+		m   map[string]int
+		sum int
+	}{
+		map[string]int{"one": 1, "two": 3, "three": 5, "four": 10},
+		19,
+	}
+	if actual := MapSum(testMap.m); actual != testMap.sum {
+		t.Error("MapSum() error.")
+	}
+	testFloatMap := struct {
+		m   map[string]float64
+		sum float64
+	}{
+		map[string]float64{"one": 1.8, "two": 3, "three": 5.1, "four": 10},
+		19.9,
+	}
+	if actual := MapSum(testFloatMap.m); actual != testFloatMap.sum {
+		t.Error("MapSum() error.")
+	}
+}
