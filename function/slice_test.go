@@ -192,3 +192,28 @@ func TestIndexOfSlice(t *testing.T) {
 		t.Error("IndexOfSlice() error.")
 	}
 }
+
+func TestFirstAndLastValueBySlice(t *testing.T) {
+	TestSlice := struct {
+		slice       []string
+		first, last string
+	}{
+		[]string{"a", "b", "c"},
+		"a",
+		"c",
+	}
+	if actualFirst, actualLast := FirstAndLastValueBySlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
+		t.Error("FirstAndLastValueBySlice() error.")
+	}
+	TestSlice = struct {
+		slice       []string
+		first, last string
+	}{
+		[]string{"a"},
+		"a",
+		"a",
+	}
+	if actualFirst, actualLast := FirstAndLastValueBySlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
+		t.Error("FirstAndLastValueBySlice() error.")
+	}
+}

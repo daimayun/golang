@@ -38,7 +38,7 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 	return sum
 }
 
-// IndexOfSlice 返回元素所在切片的下标
+// IndexOfSlice 返回元素所在切片中的下标
 func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
 	for k, v := range slice {
 		if v == target {
@@ -46,4 +46,9 @@ func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
 		}
 	}
 	return
+}
+
+// FirstAndLastValueBySlice 返回切片中第一个和最后元素
+func FirstAndLastValueBySlice[T any](slice []T) (T, T) {
+	return slice[0], slice[len(slice)-1]
 }
