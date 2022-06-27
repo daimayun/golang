@@ -48,7 +48,15 @@ func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
 	return
 }
 
-// FirstAndLastValueBySlice 返回切片中第一个和最后元素
-func FirstAndLastValueBySlice[T any](slice []T) (T, T) {
+// ValueOfSlice 返回下标对应切片中的元素
+func ValueOfSlice[T any](slice []T, index int) (val T, ok bool) {
+	if len(slice) >= index {
+		return slice[index], true
+	}
+	return
+}
+
+// FirstAndLastValueOfSlice 返回切片中第一个和最后元素
+func FirstAndLastValueOfSlice[T any](slice []T) (T, T) {
 	return slice[0], slice[len(slice)-1]
 }

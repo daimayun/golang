@@ -193,7 +193,7 @@ func TestIndexOfSlice(t *testing.T) {
 	}
 }
 
-func TestFirstAndLastValueBySlice(t *testing.T) {
+func TestFirstAndLastValueOfSlice(t *testing.T) {
 	TestSlice := struct {
 		slice       []string
 		first, last string
@@ -202,8 +202,8 @@ func TestFirstAndLastValueBySlice(t *testing.T) {
 		"a",
 		"c",
 	}
-	if actualFirst, actualLast := FirstAndLastValueBySlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
-		t.Error("FirstAndLastValueBySlice() error.")
+	if actualFirst, actualLast := FirstAndLastValueOfSlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
+		t.Error("FirstAndLastValueOfSlice() error.")
 	}
 	TestSlice = struct {
 		slice       []string
@@ -213,7 +213,38 @@ func TestFirstAndLastValueBySlice(t *testing.T) {
 		"a",
 		"a",
 	}
-	if actualFirst, actualLast := FirstAndLastValueBySlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
-		t.Error("FirstAndLastValueBySlice() error.")
+	if actualFirst, actualLast := FirstAndLastValueOfSlice(TestSlice.slice); actualFirst != TestSlice.first || actualLast != TestSlice.last {
+		t.Error("FirstAndLastValueOfSlice() error.")
+	}
+}
+
+func TestValueOfSlice(t *testing.T) {
+	TestSlice := struct {
+		slice []string
+		index int
+		value string
+		ok    bool
+	}{
+		[]string{"a", "b", "c"},
+		2,
+		"c",
+		true,
+	}
+	if actualValue, actualOk := ValueOfSlice(TestSlice.slice, TestSlice.index); actualValue != TestSlice.value || actualOk != TestSlice.ok {
+		t.Error("ValueOfSlice() error.")
+	}
+	TestSlice = struct {
+		slice []string
+		index int
+		value string
+		ok    bool
+	}{
+		[]string{"a", "b", "c"},
+		0,
+		"a",
+		true,
+	}
+	if actualValue, actualOk := ValueOfSlice(TestSlice.slice, TestSlice.index); actualValue != TestSlice.value || actualOk != TestSlice.ok {
+		t.Error("ValueOfSlice() error.")
 	}
 }
