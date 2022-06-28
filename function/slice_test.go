@@ -248,3 +248,25 @@ func TestValueOfSlice(t *testing.T) {
 		t.Error("ValueOfSlice() error.")
 	}
 }
+
+func TestSliceDiff(t *testing.T) {
+	//TestSlice := []struct {
+	//	s1, s2, result []int
+	//}{
+	//	{
+	//		[]int{1, 3, 5, 7, 9},
+	//		[]int{2, 4, 6, 8, 0},
+	//		[]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+	//	},
+	//	{
+	//		[]int{1, 0, 5, 6, 7, 8, 9, 3, 4, 5},
+	//		[]int{1, 2, 5, 6, 8, 8, 7, 3, 0, 5},
+	//		[]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+	//	},
+	//}
+	//for _, v := range TestSlice {
+	//	if actualValue, actualOk := ValueOfSlice(TestSlice.slice, TestSlice.index); actualValue != TestSlice.value || actualOk != TestSlice.ok {
+	//		t.Error("ValueOfSlice() error.")
+	//	}
+	//}
+}
