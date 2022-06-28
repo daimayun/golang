@@ -38,9 +38,26 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 	return sum
 }
 
-// SliceDiff 两个切片之间的差集[php:array_diff]
-func SliceDiff() {
-	//
+// SliceDiff 两个切片的差集[php:array_diff]
+func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
+	m := make(map[T]struct{})
+	for _, v := range s1 {
+		if _, ok := m[v]; !ok {
+			m[v] = struct{}{}
+		}
+	}
+	for _, v := range s2 {
+		if _, ok := m[v]; !ok {
+			m[v] = struct{}{}
+			s3 = append(s3, v)
+		}
+	}
+	for _, v := range s1 {
+		if _, ok := m[v]; !ok {
+			s3 = append(s3, v)
+		}
+	}
+	return
 }
 
 // IndexOfSlice 返回元素所在切片中的下标
