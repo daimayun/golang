@@ -40,6 +40,11 @@ func MapMerge[Key comparable, Val any](m1 map[Key]Val, mn ...map[Key]Val) map[Ke
 
 // MapMergeRecursive 把多个MAP合并为一个MAP[php:array_merge_recursive]
 func MapMergeRecursive[Key, Val comparable](m1 map[Key]Val, mn ...map[Key]Val) (ms map[Key][]Val) {
+	for k, v := range m1 {
+		if InSlice(ms[k], v) == false {
+			ms[k] = append(ms[k], v)
+		}
+	}
 	for _, m := range mn {
 		for k, v := range m {
 			if InSlice(ms[k], v) == false {
