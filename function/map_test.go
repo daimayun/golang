@@ -206,3 +206,9 @@ func TestMapToSlice(t *testing.T) {
 		t.Error("MapToSlice() error.")
 	}
 }
+
+func TestMapIsEqual(t *testing.T) {
+	if actual := MapIsEqual(map[string]string{"a": "1", "2": "b"}, map[string]string{"2": "b", "a": "1"}); actual == false {
+		t.Error("MapIsEqual() error.")
+	}
+}
