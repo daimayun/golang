@@ -121,6 +121,11 @@ func SliceIsEqual[T comparable](s1, s2 []T, forceChecks ...bool) bool {
 				return false
 			}
 		}
+		for _, v := range s2 {
+			if InSlice(s1, v) == false {
+				return false
+			}
+		}
 	}
 	return true
 }
