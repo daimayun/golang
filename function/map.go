@@ -2,20 +2,14 @@ package function
 
 // MapKeys 获取MAP中所有的KEY[php:array_keys]
 func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
-	keys := make([]Key, 0)
-	for k, _ := range m {
-		keys = append(keys, k)
-	}
+	keys, _ := MapToSlice(m)
 	return keys
 }
 
 // MapValues 获取MAP中所有的VALUE[php:array_values]
 func MapValues[Key comparable, Val any](m map[Key]Val) []Val {
-	keys := make([]Val, 0)
-	for _, v := range m {
-		keys = append(keys, v)
-	}
-	return keys
+	_, values := MapToSlice(m)
+	return values
 }
 
 // MapKeyExists 判断MAP中是否含有某个KEY[php:array_key_exists]
@@ -68,7 +62,7 @@ func MapDiff() {
 	//
 }
 
-// MapIsEqual 判断两个MAP是否相等[长度、KEY、Value]
+// MapIsEqual 判断两个MAP是否相等[长度、Key、Value]
 func MapIsEqual[T comparable](m1, m2 map[T]T) bool {
 	if len(m1) != len(m2) {
 		return false
@@ -80,4 +74,13 @@ func MapIsEqual[T comparable](m1, m2 map[T]T) bool {
 		}
 	}
 	return true
+}
+
+// MapToSlice 将MAP转换成两个切片
+func MapToSlice[Key comparable, Val any](m map[Key]Val) (keys []Key, values []Val) {
+	for k, v := range m {
+		keys = append(keys, k)
+		values = append(values, v)
+	}
+	return
 }

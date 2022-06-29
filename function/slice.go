@@ -59,6 +59,27 @@ func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
 	return
 }
 
+// SliceIntersect 两个切片的交集[php:array_intersect]
+func SliceIntersect[T comparable](s1, s2 []T) (s3 []T) {
+	m1 := make(map[T]struct{})
+	m2 := make(map[T]struct{})
+	for _, v := range s1 {
+		m1[v] = struct{}{}
+	}
+	for _, v := range s2 {
+		m2[v] = struct{}{}
+		if _, ok := m1[v]; !ok {
+			s3 = append(s3, v)
+		}
+	}
+	for _, v := range s1 {
+		if _, ok := m2[v]; !ok {
+			s3 = append(s3, v)
+		}
+	}
+	return
+}
+
 // IndexOfSlice 返回元素所在切片中的下标
 func IndexOfSlice[T comparable](slice []T, target T) (n int, ok bool) {
 	for k, v := range slice {
