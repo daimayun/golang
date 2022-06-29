@@ -1,6 +1,6 @@
 package function
 
-// InSlice 判断元素是否在切片内[php:in_array]
+// InSlice 判断元素是否在切片内[PHP:in_array]
 func InSlice[T comparable](slice []T, target T) bool {
 	for _, v := range slice {
 		if v == target {
@@ -10,7 +10,7 @@ func InSlice[T comparable](slice []T, target T) bool {
 	return false
 }
 
-// SliceUnique 切片去重[php:array_unique]
+// SliceUnique 切片去重[PHP:array_unique]
 func SliceUnique[T comparable](slice []T) (newSlice []T) {
 	if len(slice) <= 1 {
 		return slice
@@ -26,7 +26,7 @@ func SliceUnique[T comparable](slice []T) (newSlice []T) {
 	return newSlice
 }
 
-// SliceSum 切片元素求和[php:array_sum]
+// SliceSum 切片元素求和[PHP:array_sum]
 func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | int32 | int64 | float32 | float64](slice []T) T {
 	var sum T = 0
 	for _, v := range slice {
@@ -35,7 +35,7 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 	return sum
 }
 
-// SliceDiff 两个切片的差集[php:array_diff]
+// SliceDiff 两个切片的差集[PHP:array_diff]
 func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
 	m1 := make(map[T]struct{})
 	m2 := make(map[T]struct{})
@@ -56,7 +56,7 @@ func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
 	return
 }
 
-// SliceIntersect 两个切片的交集[php:array_intersect]
+// SliceIntersect 两个切片的交集[PHP:array_intersect]
 func SliceIntersect[T comparable](s1, s2 []T) (s3 []T) {
 	m1 := make(map[T]struct{})
 	m2 := make(map[T]struct{})
@@ -130,7 +130,7 @@ func SliceIsEqual[T comparable](s1, s2 []T, forceChecks ...bool) bool {
 	return true
 }
 
-// SliceMerge 切片合并 [php:array_merge]
+// SliceMerge 切片合并 [PHP:array_merge]
 func SliceMerge[T any](s1 []T, sn ...[]T) []T {
 	for _, v := range sn {
 		if len(v) > 0 {
