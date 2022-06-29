@@ -1,17 +1,22 @@
 package https
 
 import (
-	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-func Request(method, url string, jsonStrReader io.Reader, headers ...map[string]string) (b []byte, err error) {
+// Request 执行请求
+func Request(method, url string, body *string, headers ...map[string]string) (b []byte, err error) {
 	var (
 		req *http.Request
 		res *http.Response
 	)
-	req, err = http.NewRequest(method, url, jsonStrReader)
+	if body == nil {
+		req, err = http.NewRequest(method, url, nil)
+	} else {
+		req, err = http.NewRequest(method, url, strings.NewReader(*body))
+	}
 	if err != nil {
 		return
 	}
