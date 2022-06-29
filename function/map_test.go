@@ -196,3 +196,13 @@ func TestMapMergeRecursive(t *testing.T) {
 		}
 	}
 }
+
+func TestMapToSlice(t *testing.T) {
+	actualKeys, actualValues := MapToSlice(map[string]string{"a": "one", "b": "two", "three": "3", "4": "four"})
+	if SliceIsEqual(actualKeys, []string{"a", "b", "three", "4"}, false) == false {
+		t.Error("MapToSlice() error.")
+	}
+	if SliceIsEqual(actualValues, []string{"one", "two", "3", "four"}, false) == false {
+		t.Error("MapToSlice() error.")
+	}
+}
