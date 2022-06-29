@@ -39,7 +39,8 @@ func MapMerge[Key comparable, Val any](m1 map[Key]Val, mn ...map[Key]Val) map[Ke
 }
 
 // MapMergeRecursive 把多个MAP合并为一个MAP[php:array_merge_recursive]
-func MapMergeRecursive[Key, Val comparable](m1 map[Key]Val, mn ...map[Key]Val) (ms map[Key][]Val) {
+func MapMergeRecursive[Key, Val comparable](m1 map[Key]Val, mn ...map[Key]Val) map[Key][]Val {
+	ms := make(map[Key][]Val)
 	for k, v := range m1 {
 		if InSlice(ms[k], v) == false {
 			ms[k] = append(ms[k], v)
@@ -52,7 +53,7 @@ func MapMergeRecursive[Key, Val comparable](m1 map[Key]Val, mn ...map[Key]Val) (
 			}
 		}
 	}
-	return
+	return ms
 }
 
 // MapSum MAP的VALUE求和[php:array_sum]
