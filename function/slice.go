@@ -40,20 +40,19 @@ func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | i
 
 // SliceDiff 两个切片的差集[php:array_diff]
 func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
-	m := make(map[T]struct{})
+	m1 := make(map[T]struct{})
+	m2 := make(map[T]struct{})
 	for _, v := range s1 {
-		if _, ok := m[v]; !ok {
-			m[v] = struct{}{}
-		}
+		m1[v] = struct{}{}
 	}
 	for _, v := range s2 {
-		if _, ok := m[v]; !ok {
-			m[v] = struct{}{}
+		m2[v] = struct{}{}
+		if _, ok := m1[v]; !ok {
 			s3 = append(s3, v)
 		}
 	}
 	for _, v := range s1 {
-		if _, ok := m[v]; !ok {
+		if _, ok := m2[v]; !ok {
 			s3 = append(s3, v)
 		}
 	}
