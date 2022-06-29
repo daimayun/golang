@@ -10,7 +10,7 @@ func TestMapKeys(t *testing.T) {
 		map[string]string{"a": "one", "b": "two", "c": "three"},
 		[]string{"a", "b", "c"},
 	}
-	if actual := MapKeys(testMap.m); len(actual) != len(testMap.keys) {
+	if actual := MapKeys(testMap.m); SliceIsEqual(actual, testMap.keys, false) == false {
 		t.Error("MapKeys() error.")
 	}
 	testIntMap := struct {
@@ -20,7 +20,7 @@ func TestMapKeys(t *testing.T) {
 		map[string]int{"aa": 1, "bb": 2, "cc": 3},
 		[]string{"aa", "bb", "cc"},
 	}
-	if actual := MapKeys(testIntMap.m); len(actual) != len(testIntMap.keys) {
+	if actual := MapKeys(testIntMap.m); SliceIsEqual(actual, testIntMap.keys, false) == false {
 		t.Error("MapKeys() error.")
 	}
 }
@@ -33,7 +33,7 @@ func TestMapValues(t *testing.T) {
 		map[string]string{"a": "one", "b": "two", "c": "three"},
 		[]string{"one", "two", "three"},
 	}
-	if actual := MapValues(testMap.m); len(actual) != len(testMap.values) {
+	if actual := MapValues(testMap.m); SliceIsEqual(actual, testMap.values, false) == false {
 		t.Error("MapValues() error.")
 	}
 	testIntMap := struct {
@@ -43,7 +43,7 @@ func TestMapValues(t *testing.T) {
 		map[string]int{"aa": 1, "bb": 2, "cc": 3},
 		[]int{1, 2, 3},
 	}
-	if actual := MapValues(testIntMap.m); len(actual) != len(testIntMap.values) {
+	if actual := MapValues(testIntMap.m); SliceIsEqual(actual, testIntMap.values, false) == false {
 		t.Error("MapValues() error.")
 	}
 }
