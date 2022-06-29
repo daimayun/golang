@@ -157,3 +157,42 @@ func TestMapSum(t *testing.T) {
 		t.Error("MapSum() error.")
 	}
 }
+
+func TestMapMergeRecursive(t *testing.T) {
+	testMap := struct {
+		m1, m2 map[string]string
+		result map[string][]string
+	}{
+		map[string]string{"a": "one", "c": "three", "b": "2"},
+		map[string]string{"b": "two", "d": "four", "e": "five"},
+		map[string][]string{"a": {"one"}, "b": {"two", "2"}, "c": {"three"}, "d": {"four"}, "e": {"five"}},
+	}
+	actual := MapMergeRecursive(testMap.m1, testMap.m2)
+	if len(actual) != len(testMap.result) {
+		t.Error("MapMergeRecursive() error.")
+	}
+	for k, v := range actual {
+		if SliceIsEqual(v, testMap.result[k]) == false {
+			t.Error("MapMergeRecursive() error.")
+		}
+	}
+	testMaps := struct {
+		m1, m2, m3, m4 map[string]string
+		result         map[string][]string
+	}{
+		map[string]string{"a": "one", "c": "three", "b": "two", "g": "seven"},
+		map[string]string{"b": "two", "d": "four", "h": "eight", "e": "five"},
+		map[string]string{"j": "ten", "b": "二", "f": "six", "d": "four", "e": "five"},
+		map[string]string{"b": "2", "d": "four", "e": "5", "i": "nine"},
+		map[string][]string{"a": {"one"}, "b": {"2", "two", "二"}, "c": {"three"}, "d": {"four"}, "e": {"5", "five"}, "f": {"six"}, "g": {"seven"}, "h": {"eight"}, "i": {"nine"}, "j": {"ten"}},
+	}
+	actual = MapMergeRecursive(testMaps.m1, testMaps.m2, testMaps.m3, testMaps.m4)
+	if len(actual) != len(testMaps.result) {
+		t.Error("MapMergeRecursive() error.")
+	}
+	for k, v := range actual {
+		if SliceIsEqual(v, testMaps.result[k]) == false {
+			t.Error("MapMergeRecursive() error.")
+		}
+	}
+}
