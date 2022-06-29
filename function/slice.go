@@ -11,19 +11,16 @@ func InSlice[T comparable](slice []T, target T) bool {
 }
 
 // SliceUnique 切片去重[php:array_unique]
-func SliceUnique[T comparable](slice []T) []T {
+func SliceUnique[T comparable](slice []T) (newSlice []T) {
 	if len(slice) <= 1 {
 		return slice
 	}
-	var (
-		newSlice = make([]T, 0)
-		m        = make(map[T]interface{})
-	)
+	m := make(map[T]struct{})
 	for _, v := range slice {
 		if _, ok := m[v]; ok {
 			continue
 		}
-		m[v] = nil
+		m[v] = struct{}{}
 		newSlice = append(newSlice, v)
 	}
 	return newSlice
@@ -61,13 +58,17 @@ func SliceDiff[T comparable](s1, s2 []T) (s3 []T) {
 
 // SliceIntersect 两个切片的交集[php:array_intersect]
 func SliceIntersect[T comparable](s1, s2 []T) (s3 []T) {
-	m := make(map[T]struct{})
+	m1 := make(map[T]struct{})
+	m2 := make(map[T]struct{})
 	for _, v := range s1 {
-		m[v] = struct{}{}
+		m1[v] = struct{}{}
 	}
 	for _, v := range s2 {
-		if _, ok := m[v]; ok {
-			s3 = append(s3, v)
+		if _, ok := m1[v]; ok {
+			if _, ok = m2[v]; !ok {
+				s3 = append(s3, v)
+				m2[v] = struct{}{}
+			}
 		}
 	}
 	return
