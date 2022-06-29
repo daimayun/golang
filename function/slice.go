@@ -83,19 +83,19 @@ func FirstAndLastValueOfSlice[T any](slice []T) (T, T) {
 	return slice[0], slice[len(slice)-1]
 }
 
-// SliceIsEqual 判断两个切片是否相等[长度、容量、元素][forceCheckOrder:是否强制校验顺序]
-func SliceIsEqual[T comparable](s1, s2 []T, forceCheckOrder ...bool) bool {
+// SliceIsEqual 判断两个切片是否相等[长度、元素][forceChecks:是否强制校验顺序和容量,默认强制校验切片元素的顺序和容量大小]
+func SliceIsEqual[T comparable](s1, s2 []T, forceChecks ...bool) bool {
 	check := true
-	if len(forceCheckOrder) > 0 {
-		check = forceCheckOrder[0]
+	if len(forceChecks) > 0 {
+		check = forceChecks[0]
 	}
 	if len(s1) != len(s2) {
 		return false
 	}
-	if cap(s1) != cap(s2) {
-		return false
-	}
 	if check {
+		if cap(s1) != cap(s2) {
+			return false
+		}
 		for k, v := range s1 {
 			if s2[k] != v {
 				return false

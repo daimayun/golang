@@ -61,7 +61,7 @@ func TestSliceUnique(t *testing.T) {
 		[]string{"a", "b", "a", "d", "b", "c", "d", "e", "f", "f"},
 		[]string{"a", "b", "c", "d", "e", "f"},
 	}
-	if actual := SliceUnique(testStringSlice.slice); len(actual) != len(testStringSlice.result) {
+	if actual := SliceUnique(testStringSlice.slice); SliceIsEqual(actual, testStringSlice.result, false) == false {
 		t.Error("SliceUnique() error.")
 	}
 	testFloatSlice := struct {
@@ -70,7 +70,7 @@ func TestSliceUnique(t *testing.T) {
 		[]float64{3.14, 520, 1314, 3.14, 6.28, 520, 1, 100, 3.14},
 		[]float64{3.14, 520, 1314, 6.28, 1, 100},
 	}
-	if actual := SliceUnique(testFloatSlice.slice); len(actual) != len(testFloatSlice.result) {
+	if actual := SliceUnique(testFloatSlice.slice); SliceIsEqual(actual, testFloatSlice.result, false) == false {
 		t.Error("SliceUnique() error.")
 	}
 	testBoolSlice := struct {
@@ -79,7 +79,7 @@ func TestSliceUnique(t *testing.T) {
 		[]bool{true, false, false, false, true, false},
 		[]bool{true, false},
 	}
-	if actual := SliceUnique(testBoolSlice.slice); len(actual) != len(testBoolSlice.result) {
+	if actual := SliceUnique(testBoolSlice.slice); SliceIsEqual(actual, testBoolSlice.result, false) == false {
 		t.Error("SliceUnique() error.")
 	}
 	testIntSlice := struct {
@@ -88,7 +88,7 @@ func TestSliceUnique(t *testing.T) {
 		[]int{1, 3, 5, 3, 2, 6, 7, 9, 0, 4, 6, 8, 3, 2, 1, 0},
 		[]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
 	}
-	if actual := SliceUnique(testIntSlice.slice); len(actual) != len(testIntSlice.result) {
+	if actual := SliceUnique(testIntSlice.slice); SliceIsEqual(actual, testIntSlice.result, false) == false {
 		t.Error("SliceUnique() error.")
 	}
 }
