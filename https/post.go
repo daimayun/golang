@@ -31,8 +31,8 @@ func PostForm(url string, data url.Values, headers ...map[string]string) (b []by
 	return Request(http.MethodPost, url, &str, headers...)
 }
 
-// PostFormByNotAttachedHeader post_form 不附带Header信息
-func PostFormByNotAttachedHeader(url string, data url.Values) (b []byte, err error) {
+// PostFormByNotAttachedHeaders post_form 不附带Header信息
+func PostFormByNotAttachedHeaders(url string, data url.Values) (b []byte, err error) {
 	var res *http.Response
 	res, err = http.PostForm(url, data)
 	if err != nil {
