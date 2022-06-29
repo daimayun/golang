@@ -1,6 +1,8 @@
 package function
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMapKeys(t *testing.T) {
 	testMap := struct {
@@ -117,6 +119,18 @@ func TestMapMerge(t *testing.T) {
 		map[string]string{"a": "one", "b": "two", "c": "three", "d": "four", "e": "five"},
 	}
 	if actual := MapMerge(testMap.m1, testMap.m2); MapIsEqual(actual, testMap.result) == false {
+		t.Error("MapMerge() error.")
+	}
+	testMaps := struct {
+		m1, m2, m3, m4, result map[string]string
+	}{
+		map[string]string{"a": "one", "c": "three", "b": "two", "g": "seven"},
+		map[string]string{"b": "two", "d": "four", "h": "eight", "e": "five"},
+		map[string]string{"j": "ten", "b": "two", "f": "six", "d": "four", "e": "five"},
+		map[string]string{"b": "2", "d": "four", "e": "5", "i": "nine"},
+		map[string]string{"a": "one", "b": "2", "c": "three", "d": "four", "e": "5", "f": "six", "g": "seven", "h": "eight", "i": "nine", "j": "ten"},
+	}
+	if actual := MapMerge(testMaps.m1, testMaps.m2, testMaps.m3, testMaps.m4); MapIsEqual(actual, testMaps.result) == false {
 		t.Error("MapMerge() error.")
 	}
 }

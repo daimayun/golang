@@ -29,23 +29,13 @@ func MapValueExists[Key, Val comparable](m map[Key]Val, value Val) (key Key, ok 
 }
 
 // MapMerge 两个MAP合并[php:array_merge]
-func MapMerge[Key comparable, Val any](map1, map2 map[Key]Val) map[Key]Val {
-	m := make(map[Key]Val)
-	for i, v := range map1 {
-		for j, w := range map2 {
-			if i == j {
-				m[i] = w
-			} else {
-				if _, ok := m[i]; !ok {
-					m[i] = v
-				}
-				if _, ok := m[j]; !ok {
-					m[j] = w
-				}
-			}
+func MapMerge[Key comparable, Val any](m1 map[Key]Val, mn ...map[Key]Val) map[Key]Val {
+	for _, m := range mn {
+		for k, v := range m {
+			m1[k] = v
 		}
 	}
-	return m
+	return m1
 }
 
 // MapSum MAP的VALUE求和[php:array_sum]
