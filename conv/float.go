@@ -2,11 +2,6 @@ package conv
 
 import "strconv"
 
-// Float32ToString float32转string
-func Float32ToString(f float64) string {
-	return strconv.FormatFloat(f, 'f', -1, 32)
-}
-
 // Float64ToString float64转string
 func Float64ToString(f float64) string {
 	return strconv.FormatFloat(f, 'f', -1, 64)
