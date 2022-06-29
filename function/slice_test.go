@@ -270,3 +270,56 @@ func TestSliceDiff(t *testing.T) {
 	//	}
 	//}
 }
+
+func TestSliceIsEqual(t *testing.T) {
+	TestIntSlice := []struct {
+		s1, s2 []int
+		result bool
+	}{
+		{
+			[]int{1, 3, 5, 7, 9, 2, 4, 6, 8, 0},
+			[]int{1, 3, 5, 7, 9, 2, 4, 6, 8, 0},
+			true,
+		},
+		{
+			[]int{0, 1, 3, 5, 7, 9, 2, 4, 6, 8, 0},
+			[]int{0, 1, 3, 5, 7, 9, 2, 4, 6, 8, 0},
+			true,
+		},
+		{
+			[]int{9, 2, 4, 6, 8, 0},
+			[]int{9, 2, 4, 6, 8, 0},
+			true,
+		},
+		{
+			[]int{6, 8, 1},
+			[]int{9, 2, 4, 6, 8, 0},
+			false,
+		},
+		{
+			[]int{6, 8, 0, 9, 2, 3},
+			[]int{9, 2, 4, 6, 8, 0},
+			false,
+		},
+	}
+	for _, v := range TestIntSlice {
+		if actual := SliceIsEqual(v.s1, v.s2); actual != v.result {
+			t.Error("SliceIsEqual() error.")
+		}
+		if actual := SliceIsEqual(v.s1, v.s2, false); actual != v.result {
+			t.Error("SliceIsEqual() error.")
+		}
+	}
+	if actual := SliceIsEqual([]int{1, 3, 5, 7, 9}, []int{3, 9, 1, 7, 5}); actual == true {
+		t.Error("SliceIsEqual() error.")
+	}
+	if actual := SliceIsEqual([]int{1, 3, 5, 7, 9}, []int{3, 9, 1, 7, 5}, false); actual == false {
+		t.Error("SliceIsEqual() error.")
+	}
+	if actual := SliceIsEqual([]string{"a", "b", "c", "d"}, []string{"d", "b", "c", "a"}); actual == true {
+		t.Error("SliceIsEqual() error.")
+	}
+	if actual := SliceIsEqual([]string{"a", "b", "c", "d"}, []string{"d", "b", "c", "a"}, false); actual == false {
+		t.Error("SliceIsEqual() error.")
+	}
+}
