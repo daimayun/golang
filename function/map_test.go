@@ -172,7 +172,7 @@ func TestMapMergeRecursive(t *testing.T) {
 		t.Error("MapMergeRecursive() error.")
 	}
 	for k, v := range actual {
-		if SliceIsEqual(v, testMap.result[k]) == false {
+		if SliceIsEqual(v, (testMap.result)[k]) == false {
 			t.Error("MapMergeRecursive() error.")
 		}
 	}
@@ -191,7 +191,7 @@ func TestMapMergeRecursive(t *testing.T) {
 		t.Error("MapMergeRecursive() error.")
 	}
 	for k, v := range actual {
-		if SliceIsEqual(v, testMaps.result[k]) == false {
+		if SliceIsEqual(v, (testMaps.result)[k]) == false {
 			t.Error("MapMergeRecursive() error.")
 		}
 	}
