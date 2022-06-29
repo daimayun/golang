@@ -350,3 +350,18 @@ func TestSliceIntersect(t *testing.T) {
 		}
 	}
 }
+
+func TestSliceMerge(t *testing.T) {
+	if actual := SliceMerge([]int{1, 2, 3}); SliceIsEqual(actual, []int{1, 2, 3}, false) == false {
+		t.Error("SliceMerge() error.")
+	}
+	if actual := SliceMerge([]int{1, 2, 3}, []int{4, 5, 6}); SliceIsEqual(actual, []int{1, 2, 3, 4, 5, 6}, false) == false {
+		t.Error("SliceMerge() error.")
+	}
+	if actual := SliceMerge([]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}); SliceIsEqual(actual, []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, false) == false {
+		t.Error("SliceMerge() error.")
+	}
+	if actual := SliceMerge([]int{1, 2, 3, 4}, []int{4, 5, 6, 7}, []int{7, 8, 9, 1}); SliceIsEqual(actual, []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 4, 7}, false) == false {
+		t.Error("SliceMerge() error.")
+	}
+}

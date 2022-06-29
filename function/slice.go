@@ -124,3 +124,13 @@ func SliceIsEqual[T comparable](s1, s2 []T, forceChecks ...bool) bool {
 	}
 	return true
 }
+
+// SliceMerge 切片合并 [php:array_merge]
+func SliceMerge[T any](s1 []T, sn ...[]T) []T {
+	for _, v := range sn {
+		if len(v) > 0 {
+			s1 = append(s1, v...)
+		}
+	}
+	return s1
+}
