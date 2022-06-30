@@ -18,7 +18,7 @@ func Request(method, url string, body io.Reader, headers ...map[string]string) (
 	}
 	if len(headers) > 0 {
 		for key, value := range headers[0] {
-			req.Header.Add(key, value)
+			req.Header.Set(key, value)
 		}
 	}
 	res, err = http.DefaultClient.Do(req)
