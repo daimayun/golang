@@ -365,3 +365,11 @@ func TestSliceMerge(t *testing.T) {
 		t.Error("SliceMerge() error.")
 	}
 }
+
+func TestSliceShuffle(t *testing.T) {
+	slice := []int{1, 2, 3, 4}
+	SliceShuffle(&slice)
+	if SliceIsEqual(slice, []int{1, 2, 3, 4}, false) == false {
+		t.Error("SliceShuffle() error.")
+	}
+}

@@ -1,5 +1,7 @@
 package function
 
+import "math/rand"
+
 // InSlice 判断元素是否在切片内[PHP:in_array]
 func InSlice[T comparable](slice []T, target T) bool {
 	for _, v := range slice {
@@ -138,4 +140,13 @@ func SliceMerge[T any](s1 []T, sn ...[]T) []T {
 		}
 	}
 	return s1
+}
+
+// SliceShuffle 打乱切片[PHP:shuffle]
+func SliceShuffle[T any](slice *[]T) {
+	length := len(*slice) - 1
+	for i := length; i > 0; i-- {
+		num := rand.Intn(i + 1)
+		(*slice)[i], (*slice)[num] = (*slice)[num], (*slice)[i]
+	}
 }
