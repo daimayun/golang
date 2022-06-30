@@ -66,6 +66,16 @@ func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byt
 	return
 }
 
+// 打开文件
+func openFile(filePath string) (file *os.File, err error) {
+	file, err = os.Open(filePath)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	return
+}
+
 // PostFormWithFiles 通过form表单提交上传文件
 func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, err error) {
 	body := &bytes.Buffer{}
@@ -75,11 +85,10 @@ func PostFormWithFiles(url string, fileData, paramData map[string]string, header
 			file *os.File
 			part io.Writer
 		)
-		file, err = os.Open(filePath)
+		file, err = openFile(filePath)
 		if err != nil {
 			return
 		}
-		defer file.Close()
 		part, err = writer.CreateFormFile(key, filepath.Base(filePath))
 		if err != nil {
 			return
