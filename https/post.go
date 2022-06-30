@@ -85,7 +85,7 @@ func execFileHandle(fileKey, filePath string, writer *multipart.Writer) (err err
 	return
 }
 
-// PostFormWithFiles 通过form表单提交上传文件
+// PostFormWithFiles 通过form表单提交数据并上传文件
 func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, err error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
