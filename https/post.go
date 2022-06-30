@@ -66,13 +66,22 @@ func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byt
 	return
 }
 
-// 打开文件
-func openFile(filePath string) (file *os.File, err error) {
+// 执行文件操作处理
+func execFileHandle(fileKey, filePath string, writer *multipart.Writer) (err error) {
+	var (
+		file *os.File
+		part io.Writer
+	)
 	file, err = os.Open(filePath)
 	if err != nil {
 		return
 	}
 	defer file.Close()
+	part, err = writer.CreateFormFile(fileKey, filepath.Base(filePath))
+	if err != nil {
+		return
+	}
+	_, err = io.Copy(part, file)
 	return
 }
 
@@ -80,20 +89,8 @@ func openFile(filePath string) (file *os.File, err error) {
 func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, err error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	for key, filePath := range fileData {
-		var (
-			file *os.File
-			part io.Writer
-		)
-		file, err = openFile(filePath)
-		if err != nil {
-			return
-		}
-		part, err = writer.CreateFormFile(key, filepath.Base(filePath))
-		if err != nil {
-			return
-		}
-		_, err = io.Copy(part, file)
+	for fileKey, filePath := range fileData {
+		err = execFileHandle(fileKey, filePath, writer)
 		if err != nil {
 			return
 		}
