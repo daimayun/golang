@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // PostJson post_json
@@ -15,7 +16,7 @@ func PostJson(url, jsonString string, headers ...map[string]string) (b []byte, e
 	} else {
 		headers = []map[string]string{{"Content-Type": "application/json"}}
 	}
-	return Request(http.MethodPost, url, &jsonString, headers...)
+	return Request(http.MethodPost, url, strings.NewReader(jsonString), headers...)
 }
 
 // PostForm post_form
@@ -27,8 +28,7 @@ func PostForm(url string, data url.Values, headers ...map[string]string) (b []by
 	} else {
 		headers = []map[string]string{{"Content-Type": "application/x-www-form-urlencoded"}}
 	}
-	str := data.Encode()
-	return Request(http.MethodPost, url, &str, headers...)
+	return Request(http.MethodPost, url, strings.NewReader(data.Encode()), headers...)
 }
 
 // PostFormByNotAttachedHeaders post_form[不附带Header信息]
