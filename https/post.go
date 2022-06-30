@@ -2,9 +2,13 @@ package https
 
 import (
 	"bytes"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -62,7 +66,45 @@ func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byt
 	return
 }
 
-// PostFileByForm 通过form表单提交上传文件
-func PostFileByForm(url string) (b []byte, err error) {
-	return
+// PostFormWithFiles 通过form表单提交上传文件
+func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, err error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	for key, filePath := range fileData {
+		var (
+			file *os.File
+			part io.Writer
+		)
+		file, err = os.Open(filePath)
+		if err != nil {
+			return
+		}
+		defer file.Close()
+		part, err = writer.CreateFormFile(key, filepath.Base(filePath))
+		if err != nil {
+			return
+		}
+		_, err = io.Copy(part, file)
+		if err != nil {
+			return
+		}
+	}
+	for k, v := range paramData {
+		err = writer.WriteField(k, v)
+		if err != nil {
+			return
+		}
+	}
+	err = writer.Close()
+	if err != nil {
+		return
+	}
+	if len(headers) > 0 {
+		if _, ok := headers[0]["Content-Type"]; !ok {
+			headers[0]["Content-Type"] = writer.FormDataContentType()
+		}
+	} else {
+		headers = []map[string]string{{"Content-Type": writer.FormDataContentType()}}
+	}
+	return Request(http.MethodPost, url, body, headers...)
 }
