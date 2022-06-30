@@ -37,3 +37,10 @@ func TestPostFormByNotAttachedHeaders(t *testing.T) {
 		t.Error("PostFormByNotAttachedHeaders() error.")
 	}
 }
+
+func TestPostFormWithFiles(t *testing.T) {
+	host := "https://www.baidu.com"
+	if _, actual := PostFormWithFiles(host, map[string]string{"file": "../function/test.txt"}, map[string]string{"hello": "world"}); actual != nil {
+		t.Error("PostFormWithFiles() error.")
+	}
+}
