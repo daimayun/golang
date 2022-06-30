@@ -1,6 +1,7 @@
 package https
 
 import (
+	"bytes"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -40,5 +41,28 @@ func PostFormByNotAttachedHeaders(url string, data url.Values) (b []byte, err er
 	}
 	defer res.Body.Close()
 	b, err = ioutil.ReadAll(res.Body)
+	return
+}
+
+// PostFileByByte 以二进制格式上传文件
+func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byte, err error) {
+	if len(headers) > 0 {
+		if _, ok := headers[0]["Content-Type"]; !ok {
+			headers[0]["Content-Type"] = "multipart/form-data"
+		}
+	} else {
+		headers = []map[string]string{{"Content-Type": "multipart/form-data"}}
+	}
+	var fileByte []byte
+	fileByte, err = ioutil.ReadFile(filePath)
+	if err != nil {
+		return
+	}
+	b, err = Request(http.MethodPost, url, bytes.NewReader(fileByte), headers...)
+	return
+}
+
+// PostFileByForm 通过form表单提交上传文件
+func PostFileByForm(url string) (b []byte, err error) {
 	return
 }
