@@ -72,3 +72,9 @@ func LcWords(str string) (res string) {
 	}
 	return
 }
+
+// GetFirstAndEndString 获取字符串的第一个和最后一个字符[不区分中英文]
+func GetFirstAndEndString(str string) (string, string) {
+	slice := []rune(str)
+	return string(slice[0]), string(slice[len(slice)-1])
+}
