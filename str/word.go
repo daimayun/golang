@@ -38,7 +38,10 @@ func ToSmallCamelCase(str string, signs ...string) (res string) {
 // UcFirst 仅开头字母大写[将字符串中的第一个字母转换成大写]
 func UcFirst(str string) string {
 	for i, v := range str {
-		return string(unicode.ToUpper(v)) + str[i+1:]
+		if v >= 97 && v <= 122 {
+			return string(unicode.ToUpper(v)) + str[i+1:]
+		}
+		return str
 	}
 	return ""
 }
@@ -46,7 +49,10 @@ func UcFirst(str string) string {
 // LcFirst 仅开头字母小写[将字符串中的第一个字母转换成小写]
 func LcFirst(str string) string {
 	for i, v := range str {
-		return string(unicode.ToLower(v)) + str[i+1:]
+		if v >= 65 && v <= 90 {
+			return string(unicode.ToLower(v)) + str[i+1:]
+		}
+		return str
 	}
 	return ""
 }

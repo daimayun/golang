@@ -1,7 +1,6 @@
 package str
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -23,7 +22,6 @@ func TestGetFirstAndEndString(t *testing.T) {
 func TestLcWords(t *testing.T) {
 	str := "Hello world, 123 奔 and Ben. Where are you from. ."
 	if actual := LcWords(str); actual != "hello world, 123 奔 and ben. where are you from. ." {
-		fmt.Println(actual)
 		t.Error("LcWords() error.")
 	}
 }
