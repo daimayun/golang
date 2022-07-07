@@ -1,6 +1,9 @@
 package function
 
-import "math/rand"
+import (
+	"github.com/daimayun/golang/base"
+	"math/rand"
+)
 
 // InSlice 判断元素是否在切片内[PHP:in_array]
 func InSlice[T comparable](slice []T, target T) bool {
@@ -29,7 +32,7 @@ func SliceUnique[T comparable](slice []T) (newSlice []T) {
 }
 
 // SliceSum 切片元素求和[PHP:array_sum]
-func SliceSum[T uint | uint8 | uint16 | uint32 | uint64 | int | int8 | int16 | int32 | int64 | float32 | float64](slice []T) T {
+func SliceSum[T base.Number](slice []T) T {
 	var sum T = 0
 	for _, v := range slice {
 		sum += v

@@ -1,5 +1,7 @@
 package function
 
+import "github.com/daimayun/golang/base"
+
 // MapKeys 获取MAP中所有的KEY[PHP:array_keys]
 func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 	keys, _ := MapToSlice(m)
@@ -57,7 +59,7 @@ func MapMergeRecursive[Key, Val comparable](m1 map[Key]Val, mn ...map[Key]Val) m
 }
 
 // MapSum MAP的VALUE求和[PHP:array_sum]
-func MapSum[Key comparable, Val int | int8 | int32 | int64 | float32 | float64](m map[Key]Val) Val {
+func MapSum[Key comparable, Val base.Number](m map[Key]Val) Val {
 	var sum Val = 0
 	for _, v := range m {
 		sum += v
