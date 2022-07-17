@@ -26,3 +26,6 @@ type ResponseUserInfoData struct {
 	QrScene        int64   `json:"qr_scene"`
 	QrSceneStr     string  `json:"qr_scene_str"`
 }
+
+// AuthScopeType 应用授权作用域类型
+type AuthScopeType string
