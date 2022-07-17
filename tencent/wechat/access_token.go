@@ -23,3 +23,17 @@ func GetAccessToken(appId, appSecret string) (data ResponseAccessTokenData, errD
 	err = json.Unmarshal(b, &errData)
 	return
 }
+
+func GetAccessTokenByAuthCode(appId, appSecret, code string) (data, err error) {
+	url := "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appId + "&secret=" + appSecret + "&code=" + code + "&grant_type=authorization_code"
+	var b []byte
+	b, err = https.Get(url)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(b, &data)
+	if err != nil {
+		return
+	}
+	return
+}
