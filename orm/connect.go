@@ -35,7 +35,7 @@ type Orm struct {
 	Database           string        `json:"database"`
 	Charset            string        `json:"charset"`
 	Loc                string        `json:"loc"`
-	ParseTime          bool          `json:"parse_time"`
+	NotUseParseTime    bool          `json:"not_use_parse_time"`
 	TablePrefix        string        `json:"table_prefix"`
 	MaxIdleConnects    int           `json:"max_idle_connects"`
 	MaxOpenConnects    int           `json:"max_open_connects"`
@@ -86,7 +86,7 @@ func NewOrm(data Orm) (*gorm.DB, error) {
 	}
 	data = data.Handel()
 	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
-	if data.ParseTime {
+	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
 	}
 	Db, err = gorm.Open(mysql.Open(dsn))
