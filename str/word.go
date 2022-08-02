@@ -35,6 +35,24 @@ func ToSmallCamelCase(str string, signs ...string) (res string) {
 	return
 }
 
+// ToSnakeString XxYy to xx_yy , XxYY to xx_y_y
+func ToSnakeString(s string) string {
+	data := make([]byte, 0, len(s)*2)
+	j := false
+	num := len(s)
+	for i := 0; i < num; i++ {
+		d := s[i]
+		if i > 0 && d >= 'A' && d <= 'Z' && j {
+			data = append(data, '_')
+		}
+		if d != '_' {
+			j = true
+		}
+		data = append(data, d)
+	}
+	return strings.ToLower(string(data))
+}
+
 // UcFirst 仅开头字母大写[将字符串中的第一个字母转换成大写]
 func UcFirst(str string) string {
 	for i, v := range str {
