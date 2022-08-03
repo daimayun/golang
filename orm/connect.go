@@ -27,7 +27,7 @@ const (
 var (
 	Db                 *gorm.DB
 	notAutoCreateTable bool
-	autoResetTable     bool
+	forceResetTable    bool
 )
 
 type Orm struct {
@@ -45,7 +45,7 @@ type Orm struct {
 	MaxOpenConnects    int           `json:"max_open_connects"`
 	ConnectMaxLifetime time.Duration `json:"connect_max_lifetime"`
 	NotAutoCreateTable bool          `json:"not_auto_create_table"` // 不自动创建表[默认自动创建表]
-	AutoResetTable     bool          `json:"auto_reset_table"`      // 自动重置表[默认不自动重置表]
+	ForceResetTable    bool          `json:"force_reset_table"`     // 强制重置表[默认不强制重置表]
 }
 
 // Handel ORM数据处理
@@ -105,7 +105,7 @@ func NewOrm(data Orm) (*gorm.DB, error) {
 		return Db, err
 	}
 	notAutoCreateTable = data.NotAutoCreateTable
-	autoResetTable = data.AutoResetTable
+	forceResetTable = data.ForceResetTable
 	sqlDB.SetMaxIdleConns(data.MaxIdleConnects)
 	sqlDB.SetMaxOpenConns(data.MaxOpenConnects)
 	sqlDB.SetConnMaxLifetime(data.ConnectMaxLifetime)

@@ -2,10 +2,13 @@ package orm
 
 // Migrate 执行迁移
 func Migrate(model interface{}, options ...string) (err error) {
+	if notAutoCreateTable {
+		return
+	}
 	var tableIsExist bool
 	if Db.Migrator().HasTable(model) {
 		tableIsExist = true
-		if autoResetTable {
+		if forceResetTable {
 			err = Db.Migrator().DropTable(model)
 			if err != nil {
 				return
@@ -14,7 +17,7 @@ func Migrate(model interface{}, options ...string) (err error) {
 		}
 	}
 	if tableIsExist {
-		return nil
+		return
 	}
 	if len(options) > 0 {
 		if options[0] != "" {
