@@ -27,7 +27,7 @@ func Exec(cmd string, params ...interface{}) (interface{}, error) {
 	return con.Do(cmd, params...)
 }
 
-// Set Set命令
+// Set set命令
 func Set(key string, val interface{}) (i interface{}, err error) {
 	var str string
 	str, err = conv.InterfaceToString(val)
@@ -38,7 +38,20 @@ func Set(key string, val interface{}) (i interface{}, err error) {
 	return
 }
 
-// SetEx SetEx命令
+// Get get命令
+func Get(key string) (val string, err error) {
+	var exist interface{}
+	exist, err = Cmd("get", key)
+	if err != nil {
+		return
+	}
+	if exist != nil {
+		return rds.String(exist, nil)
+	}
+	return
+}
+
+// SetEx setEx命令
 func SetEx(key string, val interface{}, ttl int64) (i interface{}, err error) {
 	var str string
 	str, err = conv.InterfaceToString(val)
@@ -49,18 +62,32 @@ func SetEx(key string, val interface{}, ttl int64) (i interface{}, err error) {
 	return
 }
 
-func Expire(key string, ttl int64) (int, error) {
-	return rds.Int(Cmd("expire", key, ttl))
+// Expire expire命令
+func Expire(key string, ttl int64) (int64, error) {
+	return rds.Int64(Cmd("expire", key, ttl))
 }
 
+// Del del命令
 func Del(key string) (bool, error) {
 	return rds.Bool(Cmd("del", key))
 }
 
+// Ttl ttl命令
 func Ttl(key string) (int64, error) {
 	return rds.Int64(Cmd("ttl", key))
 }
 
+// HMSet hMSet命令
 func HMSet(key string, val interface{}) (interface{}, error) {
 	return Exec("HMSet", rds.Args{}.Add(key).AddFlat(val)...)
+}
+
+// HGetAll hGetAll命令
+func HGetAll(key string) ([]interface{}, error) {
+	return rds.Values(Exec("HGetAll", key))
+}
+
+// Keys keys命令
+func Keys(keys string) ([]string, error) {
+	return rds.Strings(Exec("keys", keys))
 }
