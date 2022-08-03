@@ -1,6 +1,9 @@
 package redis
 
-import "github.com/daimayun/golang/conv"
+import (
+	"github.com/daimayun/golang/conv"
+	rds "github.com/gomodule/redigo/redis"
+)
 
 // Cmd 封装后的redis执行命令
 func Cmd(cmd string, key interface{}, args ...interface{}) (interface{}, error) {
@@ -44,4 +47,20 @@ func SetEx(key string, val interface{}, ttl int64) (i interface{}, err error) {
 	}
 	i, err = Cmd("setEx", key, ttl, str)
 	return
+}
+
+func Expire(key string, ttl int64) (int, error) {
+	return rds.Int(Cmd("expire", key, ttl))
+}
+
+func Del(key string) (bool, error) {
+	return rds.Bool(Cmd("del", key))
+}
+
+func Ttl(key string) (int64, error) {
+	return rds.Int64(Cmd("ttl", key))
+}
+
+func HMSet(key string, val interface{}) (interface{}, error) {
+	return Exec("HMSet", rds.Args{}.Add(key).AddFlat(val)...)
 }
