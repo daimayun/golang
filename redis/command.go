@@ -63,8 +63,8 @@ func SetEx(key string, ttl int64, val interface{}) (i interface{}, err error) {
 }
 
 // Expire expire命令
-func Expire(key string, ttl int64) (int64, error) {
-	return rds.Int64(Cmd("expire", key, ttl))
+func Expire(key string, ttl int64) (bool, error) {
+	return rds.Bool(Cmd("expire", key, ttl))
 }
 
 // Del del命令
