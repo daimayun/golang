@@ -1,7 +1,7 @@
 package orm
 
-// Migrate 执行迁移
-func Migrate(model interface{}, options ...string) (err error) {
+// 创建表
+func createTable(model interface{}, options ...string) (err error) {
 	if notAutoCreateTable {
 		return
 	}

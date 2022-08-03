@@ -49,7 +49,7 @@ func RegisterModel(models ...interface{}) (err error) {
 			options += sign + "COMMENT='" + tableComment + "'"
 			sign = " "
 		}
-		err = Migrate(model, options)
+		err = createTable(model, options)
 		if err != nil {
 			return
 		}
