@@ -1,6 +1,8 @@
 package conv
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestInterfaceToString(t *testing.T) {
 	var str = "10"
@@ -67,6 +69,31 @@ func TestInterfaceToString(t *testing.T) {
 		t.Error("InterfaceToString() error.")
 	}
 	if actualStr, actualErr = InterfaceToString(data.b); actualStr != str || actualErr != nil {
+		t.Error("InterfaceToString() error.")
+	}
+	str = `{"name":"zs","age":18,"sex":true,"province":"河南"}`
+	user := struct {
+		Name     string `json:"name"`
+		Age      int    `json:"age"`
+		Sex      bool   `json:"sex"`
+		Province string `json:"province"`
+	}{
+		"zs",
+		18,
+		true,
+		"河南",
+	}
+	if actualStr, actualErr = InterfaceToString(user); actualStr != str || actualErr != nil {
+		t.Error("InterfaceToString() error.")
+	}
+	str = `{"province":"河南"}`
+	um := map[string]interface{}{"province": "河南"}
+	if actualStr, actualErr = InterfaceToString(um); actualStr != str || actualErr != nil {
+		t.Error("InterfaceToString() error.")
+	}
+	str = `["1","2","3"]`
+	slice := []string{"1", "2", "3"}
+	if actualStr, actualErr = InterfaceToString(slice); actualStr != str || actualErr != nil {
 		t.Error("InterfaceToString() error.")
 	}
 }
