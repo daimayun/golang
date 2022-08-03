@@ -30,6 +30,7 @@ var (
 	forceResetTable    bool
 )
 
+// Orm ORM操作数据
 type Orm struct {
 	Host               string        `json:"host"`
 	Port               int           `json:"port"`
