@@ -46,6 +46,7 @@ type Orm struct {
 	ConnectMaxLifetime time.Duration `json:"connect_max_lifetime"`
 	NotAutoCreateTable bool          `json:"not_auto_create_table"` // 不自动创建表[默认自动创建表]
 	ForceResetTable    bool          `json:"force_reset_table"`     // 强制重置表[默认不强制重置表]
+	Config             *gorm.Config  `json:"config"`
 }
 
 // Handel ORM数据处理
@@ -95,7 +96,7 @@ func NewOrm(data Orm) (*gorm.DB, error) {
 	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
 	}
-	Db, err = gorm.Open(mysql.Open(dsn))
+	Db, err = gorm.Open(mysql.Open(dsn), data.Config)
 	if err != nil {
 		return Db, err
 	}
