@@ -52,7 +52,7 @@ func Get(key string) (val string, err error) {
 }
 
 // SetEx setEx命令
-func SetEx(key string, val interface{}, ttl int64) (i interface{}, err error) {
+func SetEx(key string, ttl int64, val interface{}) (i interface{}, err error) {
 	var str string
 	str, err = conv.InterfaceToString(val)
 	if err != nil {
