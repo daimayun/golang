@@ -96,3 +96,8 @@ func HGetAll(key string) ([]interface{}, error) {
 func Keys(keys string) ([]string, error) {
 	return rds.Strings(Exec("keys", keys))
 }
+
+// Persist persist命令[移除给定key的过期时间]
+func Persist(key string) (bool, error) {
+	return rds.Bool(Cmd("persist", key))
+}
