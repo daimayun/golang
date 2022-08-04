@@ -62,9 +62,14 @@ func SetEx(key string, ttl int64, val interface{}) (i interface{}, err error) {
 	return
 }
 
-// Expire expire命令
+// Expire expire命令[给key设定一个存活时间（单位为秒）]
 func Expire(key string, ttl int64) (bool, error) {
 	return rds.Bool(Cmd("expire", key, ttl))
+}
+
+// ExpireAt expireAt命令[以UNIX时间戳格式设置key的过期时间]
+func ExpireAt(key string, timestamp int64) (bool, error) {
+	return rds.Bool(Cmd("expireAt", key, timestamp))
 }
 
 // Del del命令
