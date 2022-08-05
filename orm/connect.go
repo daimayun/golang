@@ -30,8 +30,8 @@ var (
 	forceResetTable    bool
 )
 
-// Orm ORM操作数据
-type Orm struct {
+// Data ORM操作数据
+type Data struct {
 	Host               string        `json:"host"`
 	Port               int           `json:"port"`
 	NetWork            string        `json:"net_work"`
@@ -51,7 +51,7 @@ type Orm struct {
 }
 
 // Handel ORM数据处理
-func (o Orm) Handel() Orm {
+func (o Data) Handel() Data {
 	if o.Host == "" {
 		o.Host = DefaultHost
 	}
@@ -86,7 +86,7 @@ func (o Orm) Handel() Orm {
 }
 
 // NewOrm 实例化ORM
-func NewOrm(data Orm) (*gorm.DB, error) {
+func NewOrm(data Data) (*gorm.DB, error) {
 	var err error
 	if data.Database == "" {
 		err = errors.New("database not empty")
