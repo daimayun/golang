@@ -5,7 +5,7 @@ import "io/ioutil"
 // FileGetContents 把整个文件读入一个字符串中[PHP:file_get_contents]
 func FileGetContents(filename string) (str string, err error) {
 	var data []byte
-	data, err = ioutil.ReadFile(filename)
+	data, err = FileGetContentsToByte(filename)
 	if err != nil {
 		return
 	}
