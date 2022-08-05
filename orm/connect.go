@@ -51,38 +51,38 @@ type Data struct {
 }
 
 // Handel ORM数据处理
-func (o Data) Handel() Data {
-	if o.Host == "" {
-		o.Host = DefaultHost
+func (data Data) Handel() Data {
+	if data.Host == "" {
+		data.Host = DefaultHost
 	}
-	if o.Port == 0 {
-		o.Port = DefaultPort
+	if data.Port == 0 {
+		data.Port = DefaultPort
 	}
-	if o.NetWork == "" {
-		o.NetWork = DefaultNetWork
+	if data.NetWork == "" {
+		data.NetWork = DefaultNetWork
 	}
-	if o.UserName == "" {
-		o.UserName = DefaultUserName
+	if data.UserName == "" {
+		data.UserName = DefaultUserName
 	}
-	if o.Password == "" {
-		o.Password = DefaultPassword
+	if data.Password == "" {
+		data.Password = DefaultPassword
 	}
-	if o.Charset == "" {
-		o.Charset = DefaultCharset
+	if data.Charset == "" {
+		data.Charset = DefaultCharset
 	}
-	if o.Loc == "" {
-		o.Loc = DefaultLoc
+	if data.Loc == "" {
+		data.Loc = DefaultLoc
 	}
-	if o.MaxIdleConnects == 0 {
-		o.MaxIdleConnects = DefaultMaxIdleConnects
+	if data.MaxIdleConnects == 0 {
+		data.MaxIdleConnects = DefaultMaxIdleConnects
 	}
-	if o.MaxOpenConnects == 0 {
-		o.MaxOpenConnects = DefaultMaxOpenConnects
+	if data.MaxOpenConnects == 0 {
+		data.MaxOpenConnects = DefaultMaxOpenConnects
 	}
-	if o.ConnectMaxLifetime == 0 {
-		o.ConnectMaxLifetime = DefaultConnectMaxLifetime
+	if data.ConnectMaxLifetime == 0 {
+		data.ConnectMaxLifetime = DefaultConnectMaxLifetime
 	}
-	return o
+	return data
 }
 
 // NewOrm 实例化ORM
