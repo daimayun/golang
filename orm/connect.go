@@ -51,7 +51,7 @@ type Data struct {
 }
 
 // Handel ORM数据处理
-func (data Data) Handel() Data {
+func (data Data) handel() Data {
 	if data.Host == "" {
 		data.Host = DefaultHost
 	}
@@ -92,7 +92,7 @@ func NewOrm(data Data) (*gorm.DB, error) {
 		err = errors.New("database not empty")
 		return Db, err
 	}
-	data = data.Handel()
+	data = data.handel()
 	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
 	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
