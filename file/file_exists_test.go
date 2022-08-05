@@ -2,13 +2,13 @@ package file
 
 import "testing"
 
-func TestFileExists(t *testing.T) {
+func TestExists(t *testing.T) {
 	file := "./file_exists.go"
-	if actual := FileExists(file); actual == false {
-		t.Error("FileExists() error.")
+	if actual := Exists(file); actual == false {
+		t.Error("Exists() error.")
 	}
 	file = "../file"
-	if actual := FileExists(file); actual == false {
-		t.Error("FileExists() error.")
+	if actual := Exists(file); actual == false {
+		t.Error("Exists() error.")
 	}
 }
