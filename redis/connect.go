@@ -40,7 +40,7 @@ const (
 // Rds Redis
 var Rds *redisServer
 
-func (data Data) Handel() Data {
+func (data Data) handel() Data {
 	if data.Host == "" {
 		data.Host = DefaultHost
 	}
@@ -70,7 +70,7 @@ func (data Data) Handel() Data {
 
 // NewRedis 实例化Redis
 func NewRedis(data Data) {
-	data = data.Handel()
+	data = data.handel()
 	Rds = new(redisServer)
 	Rds.Pool = &rds.Pool{
 		MaxIdle:     data.MaxIdle,
