@@ -70,6 +70,70 @@ func CurrentYearStartAndEndTime() (startTime, endTime time.Time) {
 	return YearStartAndEndTime()
 }
 
+func CurrentBeforeSecondTime(seconds ...int64) time.Time {
+	var second int64 = 1
+	if len(seconds) > 0 {
+		second = seconds[0]
+	}
+	return BeforeSecondTime(second)
+}
+
+func CurrentAfterSecondTime(seconds ...int64) time.Time {
+	var second int64 = 1
+	if len(seconds) > 0 {
+		second = seconds[0]
+	}
+	return AfterSecondTime(second)
+}
+
+func CurrentBeforeDayTime(days ...int) time.Time {
+	day := 1
+	if len(days) > 0 {
+		day = days[0]
+	}
+	return BeforeDayTime(day)
+}
+
+func CurrentAfterDayTime(days ...int) time.Time {
+	day := 1
+	if len(days) > 0 {
+		day = days[0]
+	}
+	return AfterDayTime(day)
+}
+
+func CurrentBeforeMonthTime(months ...int) time.Time {
+	month := 1
+	if len(months) > 0 {
+		month = months[0]
+	}
+	return BeforeMonthTime(month)
+}
+
+func CurrentAfterMonthTime(months ...int) time.Time {
+	month := 1
+	if len(months) > 0 {
+		month = months[0]
+	}
+	return AfterMonthTime(month)
+}
+
+func CurrentBeforeYearTime(years ...int) time.Time {
+	year := 1
+	if len(years) > 0 {
+		year = years[0]
+	}
+	return BeforeYearTime(year)
+}
+
+func CurrentAfterYearTime(years ...int) time.Time {
+	year := 1
+	if len(years) > 0 {
+		year = years[0]
+	}
+	return AfterYearTime(year)
+}
+
 // DayStartAndEndTime 该天00:00:00时间和该天23:59:59时间
 func DayStartAndEndTime(ts ...time.Time) (startTime, endTime time.Time) {
 	t := TimeNow()
