@@ -148,21 +148,21 @@ func YearStartAndEndTime(ts ...time.Time) (startTime, endTime time.Time) {
 }
 
 // BeforeSecondTime N秒前的时间
-func BeforeSecondTime(seconds ...int64) time.Time {
-	var second int64 = 1
-	if len(seconds) > 0 {
-		second = seconds[0]
+func BeforeSecondTime(seconds int64, ts ...time.Time) time.Time {
+	tu := TimeNowUnix()
+	if len(ts) > 0 {
+		tu = ts[0].Unix()
 	}
-	return time.Unix(TimeNowUnix()-second, 0)
+	return time.Unix(tu-seconds, 0)
 }
 
 // AfterSecondTime N秒后的时间
-func AfterSecondTime(seconds ...int64) time.Time {
-	var second int64 = 1
-	if len(seconds) > 0 {
-		second = seconds[0]
+func AfterSecondTime(seconds int64, ts ...time.Time) time.Time {
+	tu := TimeNowUnix()
+	if len(ts) > 0 {
+		tu = ts[0].Unix()
 	}
-	return time.Unix(TimeNowUnix()+second, 0)
+	return time.Unix(tu+seconds, 0)
 }
 
 // BeforeDayTime N天前的当前时间
