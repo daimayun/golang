@@ -70,6 +70,7 @@ func CurrentYearStartAndEndTime() (startTime, endTime time.Time) {
 	return YearStartAndEndTime()
 }
 
+// CurrentBeforeSecondTime 当前N秒前的时间
 func CurrentBeforeSecondTime(seconds ...int64) time.Time {
 	var second int64 = 1
 	if len(seconds) > 0 {
@@ -78,6 +79,7 @@ func CurrentBeforeSecondTime(seconds ...int64) time.Time {
 	return BeforeSecondTime(second)
 }
 
+// CurrentAfterSecondTime 当前N秒后的时间
 func CurrentAfterSecondTime(seconds ...int64) time.Time {
 	var second int64 = 1
 	if len(seconds) > 0 {
@@ -86,6 +88,7 @@ func CurrentAfterSecondTime(seconds ...int64) time.Time {
 	return AfterSecondTime(second)
 }
 
+// CurrentBeforeDayTime 当前N天前的当前时间
 func CurrentBeforeDayTime(days ...int) time.Time {
 	day := 1
 	if len(days) > 0 {
@@ -94,6 +97,7 @@ func CurrentBeforeDayTime(days ...int) time.Time {
 	return BeforeDayTime(day)
 }
 
+// CurrentAfterDayTime 当前N天后的当前时间
 func CurrentAfterDayTime(days ...int) time.Time {
 	day := 1
 	if len(days) > 0 {
@@ -102,6 +106,7 @@ func CurrentAfterDayTime(days ...int) time.Time {
 	return AfterDayTime(day)
 }
 
+// CurrentBeforeMonthTime 当前N月前的当前时间
 func CurrentBeforeMonthTime(months ...int) time.Time {
 	month := 1
 	if len(months) > 0 {
@@ -110,6 +115,7 @@ func CurrentBeforeMonthTime(months ...int) time.Time {
 	return BeforeMonthTime(month)
 }
 
+// CurrentAfterMonthTime 当前N月后的当前时间
 func CurrentAfterMonthTime(months ...int) time.Time {
 	month := 1
 	if len(months) > 0 {
@@ -118,6 +124,7 @@ func CurrentAfterMonthTime(months ...int) time.Time {
 	return AfterMonthTime(month)
 }
 
+// CurrentBeforeYearTime 当前N年前的当前时间
 func CurrentBeforeYearTime(years ...int) time.Time {
 	year := 1
 	if len(years) > 0 {
@@ -126,6 +133,7 @@ func CurrentBeforeYearTime(years ...int) time.Time {
 	return BeforeYearTime(year)
 }
 
+// CurrentAfterYearTime 当前N年后的当前时间
 func CurrentAfterYearTime(years ...int) time.Time {
 	year := 1
 	if len(years) > 0 {
