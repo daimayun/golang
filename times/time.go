@@ -234,7 +234,11 @@ func TimestampToTime(timestamp int64) time.Time {
 }
 
 // DayToTime 根据天数/号返回当前月的时间
-func DayToTime(day int8, hour, minute, second int8) (t time.Time, err error) {
+func DayToTime(day int8, hour, minute, second int8, ts ...time.Time) (t time.Time, err error) {
+	ti := TimeNow()
+	if len(ts) > 0 {
+		ti = ts[0]
+	}
 	if day <= 0 || day > 31 {
 		err = errors.New("日期天数不正确")
 		return
@@ -267,7 +271,7 @@ func DayToTime(day int8, hour, minute, second int8) (t time.Time, err error) {
 	if second < 10 {
 		s = "0" + s
 	}
-	return time.ParseInLocation(TimeLayout, TimeNow().Format(TimeLayoutYM)+"-"+d+" "+h+":"+i+":"+s, time.Local)
+	return time.ParseInLocation(TimeLayout, ti.Format(TimeLayoutYM)+"-"+d+" "+h+":"+i+":"+s, time.Local)
 }
 
 // FebruaryIsLeapYear 二月是否是闰年
