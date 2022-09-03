@@ -2,6 +2,49 @@ package times
 
 import "time"
 
+// FebruaryIsLeapYear 二月是否是闰年
+func FebruaryIsLeapYear(year int) bool {
+	if (year%4 == 0 && year%100 != 0) || year%400 == 0 {
+		return true
+	}
+	return false
+}
+
+// MonthDays 该月有多少天
+func MonthDays(ts ...time.Time) int8 {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
+	}
+	month := int8(t.Month())
+	type dayType map[int8]struct{}
+	day31 := dayType{
+		1:  {},
+		3:  {},
+		5:  {},
+		7:  {},
+		8:  {},
+		10: {},
+		12: {},
+	}
+	if _, ok := day31[month]; ok {
+		return 31
+	}
+	day30 := dayType{
+		4:  {},
+		6:  {},
+		9:  {},
+		11: {},
+	}
+	if _, ok := day30[month]; ok {
+		return 30
+	}
+	if FebruaryIsLeapYear(t.Year()) {
+		return 29
+	}
+	return 28
+}
+
 // SubMonths 两个时间相隔多少个月[t1减t2][优先使用]
 func SubMonths(t1, t2 time.Time) (month int) {
 	y1 := t1.Year()
