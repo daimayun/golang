@@ -233,7 +233,7 @@ func TimestampToTime(timestamp int64) time.Time {
 	return time.Unix(timestamp, 0)
 }
 
-// DayToTime 根据天数/号返回当前月的时间
+// DayToTime 根据天数/号返回指定 Time
 func DayToTime(day int8, hour, minute, second int8, ts ...time.Time) (t time.Time, err error) {
 	ti := TimeNow()
 	if len(ts) > 0 {
