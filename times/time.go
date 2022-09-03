@@ -166,57 +166,57 @@ func AfterSecondTime(seconds ...int64) time.Time {
 }
 
 // BeforeDayTime N天前的当前时间
-func BeforeDayTime(days ...int) time.Time {
-	day := 1
-	if len(days) > 0 {
-		day = days[0]
+func BeforeDayTime(days int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(0, 0, -day)
+	return t.AddDate(0, 0, -days)
 }
 
 // AfterDayTime N天后的当前时间
-func AfterDayTime(days ...int) time.Time {
-	day := 1
-	if len(days) > 0 {
-		day = days[0]
+func AfterDayTime(days int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(0, 0, day)
+	return t.AddDate(0, 0, days)
 }
 
 // BeforeMonthTime N月前的当前时间
-func BeforeMonthTime(months ...int) time.Time {
-	month := 1
-	if len(months) > 0 {
-		month = months[0]
+func BeforeMonthTime(months int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(0, -month, 0)
+	return t.AddDate(0, -months, 0)
 }
 
 // AfterMonthTime N月后的当前时间
-func AfterMonthTime(months ...int) time.Time {
-	month := 1
-	if len(months) > 0 {
-		month = months[0]
+func AfterMonthTime(months int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(0, month, 0)
+	return t.AddDate(0, months, 0)
 }
 
 // BeforeYearTime N年前的当前时间
-func BeforeYearTime(years ...int) time.Time {
-	year := 1
-	if len(years) > 0 {
-		year = years[0]
+func BeforeYearTime(years int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(-year, 0, 0)
+	return t.AddDate(-years, 0, 0)
 }
 
 // AfterYearTime N年后的当前时间
-func AfterYearTime(years ...int) time.Time {
-	year := 1
-	if len(years) > 0 {
-		year = years[0]
+func AfterYearTime(years int, ts ...time.Time) time.Time {
+	t := TimeNow()
+	if len(ts) > 0 {
+		t = ts[0]
 	}
-	return TimeNow().AddDate(year, 0, 0)
+	return t.AddDate(years, 0, 0)
 }
 
 // StringToTime 将字符串转为时间[2021-08-08 08:08:08]
