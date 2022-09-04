@@ -23,7 +23,7 @@ func PutContentsByByte(filename string, data []byte) error {
 // PutContentsByByteToAppend 把byte写入文件中[追加至原文件][PHP:file_put_contents,FILE_APPEND]
 func PutContentsByByteToAppend(filename string, data []byte) (err error) {
 	var f *os.File
-	f, err = os.OpenFile(filename, os.O_APPEND|os.O_CREATE, 0644)
+	f, err = os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		return
 	}
