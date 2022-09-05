@@ -28,3 +28,27 @@ func TestFebruaryIsLeapYear(t *testing.T) {
 		t.Error("FebruaryIsLeapYear() error.")
 	}
 }
+
+func TestMonthDays(t *testing.T) {
+	ts, err := StringToTime("2020-02-15", TimeLayoutYMD)
+	if err != nil {
+		t.Error("StringToTime() error.")
+	}
+	if MonthDays(ts) != 29 {
+		t.Error("MonthDays() error.")
+	}
+	ts, err = StringToTime("2020-01-15", TimeLayoutYMD)
+	if err != nil {
+		t.Error("StringToTime() error.")
+	}
+	if MonthDays(ts) != 31 {
+		t.Error("MonthDays() error.")
+	}
+	ts, err = StringToTime("2020-04-15", TimeLayoutYMD)
+	if err != nil {
+		t.Error("StringToTime() error.")
+	}
+	if MonthDays(ts) != 30 {
+		t.Error("MonthDays() error.")
+	}
+}
