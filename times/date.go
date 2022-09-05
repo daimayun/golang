@@ -1,6 +1,9 @@
 package times
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 // FebruaryIsLeapYear 二月是否是闰年
 func FebruaryIsLeapYear(year int) bool {
@@ -101,90 +104,76 @@ func SubDays(t1, t2 time.Time) (days int) {
 }
 
 // GenerateBetweenDays 根据开始日期和结束日期生成该时间段内所有日期[两个日期内所有天数]
-func GenerateBetweenDays(startDate, endDate string, layouts ...string) (d []string) {
-	layout := TimeLayoutYMD
-	if len(layouts) > 0 {
-		layout = layouts[0]
+func GenerateBetweenDays(startTime, endTime time.Time) (days []time.Time) {
+	if endTime.Before(startTime) {
+		startTime, endTime = endTime, startTime
 	}
-	timeFormatTpl := TimeLayout
-	if len(timeFormatTpl) != len(startDate) {
-		timeFormatTpl = timeFormatTpl[0:len(startDate)]
-	}
-	date, err := time.Parse(timeFormatTpl, startDate)
-	if err != nil {
-		// 时间解析，异常
+	startDay := startTime.Format(TimeLayoutYMD)
+	endDay := endTime.Format(TimeLayoutYMD)
+	days = append(days, startTime)
+	if startDay == endDay {
 		return
 	}
-	var date2 time.Time
-	date2, err = time.Parse(timeFormatTpl, endDate)
-	if err != nil {
-		// 时间解析，异常
-		return
-	}
-	// 日期相等直接返回
-	if startDate == endDate {
-		d = []string{startDate}
-		return
-	}
-	if date2.Before(date) {
-		// 如果结束时间小于开始时间，异常
-		return
-	}
-	date2Str := date2.Format(layout)
-	d = append(d, date.Format(layout))
 	for {
-		date = date.AddDate(0, 0, 1)
-		dateStr := date.Format(layout)
-		d = append(d, dateStr)
-		if dateStr == date2Str {
+		startTime = startTime.AddDate(0, 0, 1)
+		if startTime.Format(TimeLayoutYMD) == endDay {
+			days = append(days, endTime)
 			break
 		}
+		days = append(days, startTime)
 	}
 	return
 }
 
 // GenerateBetweenMonths 根据开始日期和结束日期生成该时间段内所有月份
-func GenerateBetweenMonths(startDate, endDate string, layouts ...string) (d []string) {
+func GenerateBetweenMonths(startTime, endTime time.Time) (months []time.Time) {
+	if endTime.Before(startTime) {
+		startTime, endTime = endTime, startTime
+	}
+	startMonth := startTime.Format(TimeLayoutYM)
+	endMonth := endTime.Format(TimeLayoutYM)
+	months = append(months, startTime)
+	if startMonth == endMonth {
+		return
+	}
+	for {
+		startTime = startTime.AddDate(0, 1, 0)
+		if startTime.Format(TimeLayoutYM) == endMonth {
+			months = append(months, endTime)
+			break
+		}
+		months = append(months, startTime)
+	}
+	return
+}
+
+// GenerateBetweenDates 根据开始日期和结束日期生成该时间段内指定的所有日期
+func GenerateBetweenDates(dateType DateType, startDate, endDate string, layouts ...string) (dates []time.Time, err error) {
 	layout := TimeLayoutYMD
 	if len(layouts) > 0 {
 		layout = layouts[0]
 	}
-	timeFormatTpl := TimeLayout
-	if len(layouts) > 1 {
-		timeFormatTpl = layouts[1]
+	layoutLength := len(layout)
+	if len(startDate) != layoutLength || len(endDate) != layoutLength {
+		err = errors.New("日期格式有误")
+		return
 	}
-	if len(timeFormatTpl) != len(startDate) {
-		timeFormatTpl = timeFormatTpl[0:len(startDate)]
-	}
-	date, err := time.Parse(timeFormatTpl, startDate)
+	var startTime, endTime time.Time
+	startTime, err = time.Parse(layout, startDate)
 	if err != nil {
-		// 时间解析，异常
 		return
 	}
-	var date2 time.Time
-	date2, err = time.Parse(timeFormatTpl, endDate)
+	endTime, err = time.Parse(layout, endDate)
 	if err != nil {
-		// 时间解析，异常
 		return
 	}
-	// 日期相等直接返回
-	if startDate == endDate {
-		d = []string{startDate}
+	switch dateType {
+	case DateTypeDay:
+		dates = GenerateBetweenDays(startTime, endTime)
 		return
-	}
-	if date2.Before(date) {
-		// 如果结束时间小于开始时间，异常
+	case DateTypeMonth:
+		dates = GenerateBetweenMonths(startTime, endTime)
 		return
-	}
-	date2Str := date2.Format(layout)
-	d = append(d, date.Format(layout))
-	for {
-		date = date.AddDate(0, 1, 0)
-		dateStr := date.Format(layout)
-		d = append(d, dateStr)
-		if dateStr == date2Str {
-			break
-		}
 	}
 	return
 }

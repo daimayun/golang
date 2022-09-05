@@ -9,3 +9,12 @@ var (
 
 // TimeVariable 时间变量[有可能是正负数]
 var TimeVariable int64
+
+type DateType string
+
+var (
+	// DateTypeDay 天日期类型
+	DateTypeDay DateType = "day"
+	// DateTypeMonth 月日期类型
+	DateTypeMonth DateType = "month"
+)
