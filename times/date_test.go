@@ -1,6 +1,8 @@
 package times
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestFebruaryIsLeapYear(t *testing.T) {
 	year := 1990
@@ -50,5 +52,17 @@ func TestMonthDays(t *testing.T) {
 	}
 	if MonthDays(ts) != 30 {
 		t.Error("MonthDays() error.")
+	}
+}
+
+func TestSubMonths(t *testing.T) {
+	startTime := TimeNow()
+	endTime := TimeNow()
+	if SubMonths(startTime, endTime) != 0 {
+		t.Error("SubMonths() error.")
+	}
+	endTime = AfterMonthTime(5, startTime)
+	if SubMonths(endTime, startTime) != 5 {
+		t.Error("SubMonths() error.")
 	}
 }
