@@ -152,7 +152,7 @@ func TestGenerateBetweenDates(t *testing.T) {
 		"2023-08",
 		"2023-09",
 	}
-	timeList, err = GenerateBetweenDates(DateTypeDay, startDate, endDate, TimeLayoutYMD)
+	timeList, err = GenerateBetweenDates(DateTypeMonth, startDate, endDate, TimeLayoutYMD)
 	if err != nil {
 		t.Error("GenerateBetweenDates() error.")
 	}
