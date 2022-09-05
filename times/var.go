@@ -1,5 +1,6 @@
 package times
 
+// 日期格式
 var (
 	TimeLayoutYMDHIS string = "20060102150405"
 	TimeLayout       string = "2006-01-02 15:04:05"
@@ -9,8 +10,6 @@ var (
 
 // TimeVariable 时间变量[有可能是正负数]
 var TimeVariable int64
-
-type DateType string
 
 var (
 	// DateTypeDay 天日期类型
