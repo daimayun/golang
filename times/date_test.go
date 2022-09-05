@@ -1,6 +1,7 @@
 package times
 
 import (
+	"fmt"
 	"github.com/daimayun/golang/function"
 	"testing"
 )
@@ -132,7 +133,8 @@ func TestGenerateBetweenDates(t *testing.T) {
 	for _, v := range timeList {
 		timeDays = append(timeDays, v.Format(TimeLayoutYMD))
 	}
-	if function.SliceIsEqual(days, timeDays, true) == false {
+	fmt.Println(timeDays)
+	if function.SliceIsEqual(days, timeDays, false) == false {
 		t.Error("GenerateBetweenDates() error.")
 	}
 	endDate = "2023-09-09"
@@ -160,7 +162,8 @@ func TestGenerateBetweenDates(t *testing.T) {
 	for _, v := range timeList {
 		timeMonths = append(timeMonths, v.Format(TimeLayoutYM))
 	}
-	if function.SliceIsEqual(months, timeMonths, true) == false {
+	fmt.Println(timeMonths)
+	if function.SliceIsEqual(months, timeMonths, false) == false {
 		t.Error("GenerateBetweenDates() error.")
 	}
 }
