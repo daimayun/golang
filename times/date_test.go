@@ -72,3 +72,15 @@ func TestSubMonths(t *testing.T) {
 		t.Error("subMonths() error.")
 	}
 }
+
+func TestSubDays(t *testing.T) {
+	startTime := TimeNow()
+	endTime := TimeNow()
+	if SubDays(endTime, startTime) != 0 {
+		t.Error("SubDays() error.")
+	}
+	endTime = AfterDayTime(45, startTime)
+	if SubDays(endTime, startTime) != 45 {
+		t.Error("SubDays() error.")
+	}
+}
