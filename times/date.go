@@ -46,19 +46,19 @@ func MonthDays(ts ...time.Time) int8 {
 }
 
 // SubMonths 两个时间相隔多少个月[t1减t2][优先使用]
-func SubMonths(t1, t2 time.Time) (month int) {
+func SubMonths(t1, t2 time.Time) (months int) {
 	y1 := t1.Year()
 	y2 := t2.Year()
 	m1 := int(t1.Month())
 	m2 := int(t2.Month())
 	chaY := y1 - y2
 	chaM := 12 - m2 + m1
-	month = chaM + ((chaY - 1) * 12)
+	months = chaM + ((chaY - 1) * 12)
 	return
 }
 
 // subMonths 两个时间相隔多少个月[t1减t2]
-func subMonths(t1, t2 time.Time) (month int) {
+func subMonths(t1, t2 time.Time) (months int) {
 	y1 := t1.Year()
 	y2 := t2.Year()
 	m1 := int(t1.Month())
@@ -76,12 +76,12 @@ func subMonths(t1, t2 time.Time) (month int) {
 		monthInterval--
 	}
 	monthInterval %= 12
-	month = yearInterval*12 + monthInterval
+	months = yearInterval*12 + monthInterval
 	return
 }
 
 // SubDays 两个时间相隔多少天[t1减t2]
-func SubDays(t1, t2 time.Time) (day int) {
+func SubDays(t1, t2 time.Time) (days int) {
 	swap := false
 	if t1.Unix() < t2.Unix() {
 		t_ := t1
@@ -89,13 +89,13 @@ func SubDays(t1, t2 time.Time) (day int) {
 		t2 = t_
 		swap = true
 	}
-	day = int(t1.Sub(t2).Hours() / 24)
+	days = int(t1.Sub(t2).Hours() / 24)
 	// 计算在被24整除外的时间是否存在跨自然日
 	if int(t1.Sub(t2).Milliseconds())%86400000 > int(86400000-t2.Unix()%86400000) {
-		day += 1
+		days += 1
 	}
 	if swap {
-		day = -day
+		days = -days
 	}
 	return
 }
