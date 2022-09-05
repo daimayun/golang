@@ -61,8 +61,14 @@ func TestSubMonths(t *testing.T) {
 	if SubMonths(startTime, endTime) != 0 {
 		t.Error("SubMonths() error.")
 	}
+	if subMonths(startTime, endTime) != 0 {
+		t.Error("subMonths() error.")
+	}
 	endTime = AfterMonthTime(5, startTime)
 	if SubMonths(endTime, startTime) != 5 {
 		t.Error("SubMonths() error.")
+	}
+	if subMonths(endTime, startTime) != 5 {
+		t.Error("subMonths() error.")
 	}
 }
