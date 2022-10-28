@@ -72,8 +72,13 @@ func NewOrm(data Data) (*gorm.DB, error) {
 	}
 	notAutoCreateTable = data.NotAutoCreateTable
 	forceResetTable = data.ForceResetTable
+
+	// 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(data.MaxIdleConnects)
+	// 设置打开数据库连接的最大数量
 	sqlDB.SetMaxOpenConns(data.MaxOpenConnects)
+	// 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(data.ConnectMaxLifetime)
+
 	return Db, nil
 }
