@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// ORM配置默认值
 const (
 	DefaultHost               = "127.0.0.1"
 	DefaultPort               = 3306
@@ -24,13 +25,11 @@ const (
 	ParseTimeTrueVal = "True"
 )
 
-var (
-	Db                 *gorm.DB
-	notAutoCreateTable bool
-	forceResetTable    bool
-)
+var Db *gorm.DB
 
-// Data ORM操作数据
+var notAutoCreateTable, forceResetTable bool
+
+// Data ORM配置数据
 type Data struct {
 	Host               string        `json:"host"`
 	Port               int           `json:"port"`
@@ -50,41 +49,6 @@ type Data struct {
 	Config             *gorm.Config  `json:"config"`
 }
 
-// Handel ORM数据处理
-func (data Data) handel() Data {
-	if data.Host == "" {
-		data.Host = DefaultHost
-	}
-	if data.Port == 0 {
-		data.Port = DefaultPort
-	}
-	if data.NetWork == "" {
-		data.NetWork = DefaultNetWork
-	}
-	if data.UserName == "" {
-		data.UserName = DefaultUserName
-	}
-	if data.Password == "" {
-		data.Password = DefaultPassword
-	}
-	if data.Charset == "" {
-		data.Charset = DefaultCharset
-	}
-	if data.Loc == "" {
-		data.Loc = DefaultLoc
-	}
-	if data.MaxIdleConnects == 0 {
-		data.MaxIdleConnects = DefaultMaxIdleConnects
-	}
-	if data.MaxOpenConnects == 0 {
-		data.MaxOpenConnects = DefaultMaxOpenConnects
-	}
-	if data.ConnectMaxLifetime == 0 {
-		data.ConnectMaxLifetime = DefaultConnectMaxLifetime
-	}
-	return data
-}
-
 // NewOrm 实例化ORM
 func NewOrm(data Data) (*gorm.DB, error) {
 	var err error
@@ -92,7 +56,7 @@ func NewOrm(data Data) (*gorm.DB, error) {
 		err = errors.New("database not empty")
 		return Db, err
 	}
-	data = data.handel()
+	data = data.handler()
 	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
 	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
