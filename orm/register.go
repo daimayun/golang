@@ -116,3 +116,14 @@ func getTableAutoIncrement(val reflect.Value) int64 {
 	}
 	return 0
 }
+
+// getTableName Get model struct table name
+func getTableName(val reflect.Value) string {
+	if fun := val.MethodByName("TableName"); fun.IsValid() {
+		values := fun.Call([]reflect.Value{})
+		if len(values) > 0 && values[0].Kind() == reflect.String {
+			return values[0].String()
+		}
+	}
+	return ""
+}
