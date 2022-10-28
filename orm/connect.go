@@ -29,28 +29,29 @@ var Db *gorm.DB
 
 var notAutoCreateTable, forceResetTable bool
 
-// Data ORM配置数据
-type Data struct {
-	Host               string        `json:"host"`
-	Port               int           `json:"port"`
-	NetWork            string        `json:"net_work"`
-	UserName           string        `json:"user_name"`
-	Password           string        `json:"password"`
-	Database           string        `json:"database"`
-	Charset            string        `json:"charset"`
-	Loc                string        `json:"loc"`
-	NotUseParseTime    bool          `json:"not_use_parse_time"`
-	TablePrefix        string        `json:"table_prefix"`
-	MaxIdleConnects    int           `json:"max_idle_connects"`
-	MaxOpenConnects    int           `json:"max_open_connects"`
-	ConnectMaxLifetime time.Duration `json:"connect_max_lifetime"`
-	NotAutoCreateTable bool          `json:"not_auto_create_table"` // 不自动创建表[默认自动创建表]
-	ForceResetTable    bool          `json:"force_reset_table"`     // 强制重置表[默认不强制重置表]
-	Config             *gorm.Config  `json:"config"`
+// Config ORM配置数据
+type Config struct {
+	Host               string
+	Port               int
+	NetWork            string
+	UserName           string
+	Password           string
+	Database           string
+	Charset            string
+	Loc                string
+	NotUseParseTime    bool
+	TablePrefix        string
+	MaxIdleConnects    int
+	MaxOpenConnects    int
+	ConnectMaxLifetime time.Duration
+	GormConfig         *gorm.Config
+	MysqlConfig        mysql.Config
+	NotAutoCreateTable bool // 不自动创建表[默认自动创建表]
+	ForceResetTable    bool // 强制重置表[默认不强制重置表]
 }
 
 // NewOrm 实例化ORM
-func NewOrm(data Data) (*gorm.DB, error) {
+func NewOrm(data Config) (*gorm.DB, error) {
 	var err error
 
 	// 数据库不能为空
@@ -67,9 +68,12 @@ func NewOrm(data Data) (*gorm.DB, error) {
 	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
 	}
+	if data.MysqlConfig.DSN == "" {
+		data.MysqlConfig.DSN = dsn
+	}
 
-	//
-	Db, err = gorm.Open(mysql.Open(dsn), data.Config)
+	// GORM OPEN
+	Db, err = gorm.Open(mysql.New(data.MysqlConfig), data.GormConfig)
 	if err != nil {
 		return Db, err
 	}

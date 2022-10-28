@@ -1,7 +1,7 @@
 package orm
 
 // Handel ORM连接配置参数处理助手
-func (data Data) handler() Data {
+func (data Config) handler() Config {
 	if data.Host == "" {
 		data.Host = DefaultHost
 	}
