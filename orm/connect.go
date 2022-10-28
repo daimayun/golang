@@ -52,26 +52,39 @@ type Data struct {
 // NewOrm 实例化ORM
 func NewOrm(data Data) (*gorm.DB, error) {
 	var err error
+
+	// 数据库不能为空
 	if data.Database == "" {
 		err = errors.New("database not empty")
 		return Db, err
 	}
+
+	// ORM连接配置参数处理
 	data = data.handler()
+
+	// DSN data source name
 	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
 	if !data.NotUseParseTime {
 		dsn += "&parseTime=" + ParseTimeTrueVal
 	}
+
+	//
 	Db, err = gorm.Open(mysql.Open(dsn), data.Config)
 	if err != nil {
 		return Db, err
 	}
+
+	// 是否自动创建表
+	notAutoCreateTable = data.NotAutoCreateTable
+	// 是否强制重置表
+	forceResetTable = data.ForceResetTable
+
+	// 使用连接池
 	var sqlDB *sql.DB
 	sqlDB, err = Db.DB()
 	if err != nil {
 		return Db, err
 	}
-	notAutoCreateTable = data.NotAutoCreateTable
-	forceResetTable = data.ForceResetTable
 
 	// 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(data.MaxIdleConnects)

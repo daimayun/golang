@@ -1,6 +1,6 @@
 package orm
 
-// Handel ORM连接参数处理助手
+// Handel ORM连接配置参数处理助手
 func (data Data) handler() Data {
 	if data.Host == "" {
 		data.Host = DefaultHost
