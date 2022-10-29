@@ -49,7 +49,11 @@ func RegisterModel(models ...interface{}) (err error) {
 			options += sign + "COMMENT='" + tableComment + "'"
 			sign = " "
 		}
-		err = createTable(model, options)
+		data := createTableData{Model: model}
+		if options != "" {
+			data.Options = &options
+		}
+		err = createTable(data)
 		if err != nil {
 			return
 		}

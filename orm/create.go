@@ -1,28 +1,46 @@
 package orm
 
+// 创建表数据
+type createTableData struct {
+	Model   interface{}
+	Options *string
+	Rename  *string
+}
+
 // 创建表
-func createTable(model interface{}, options ...string) (err error) {
+func createTable(data createTableData) (err error) {
+	// 判断是否自动创建表
 	if notAutoCreateTable {
 		return
 	}
+
+	// 判断表是否存在
 	var tableIsExist bool
-	if Db.Migrator().HasTable(model) {
+	if Db.Migrator().HasTable(data.Model) {
 		tableIsExist = true
+		// 如果强制重置表
 		if forceResetTable {
-			err = Db.Migrator().DropTable(model)
+			// 删除表
+			err = Db.Migrator().DropTable(data.Model)
 			if err != nil {
 				return
 			}
 			tableIsExist = false
 		}
 	}
+	// 表存在则直接返回
 	if tableIsExist {
 		return
 	}
-	if len(options) > 0 {
-		if options[0] != "" {
-			return Db.Set("gorm:table_options", options[0]).AutoMigrate(model)
-		}
+
+	// 开始创建表
+	db := Db
+	if data.Options != nil {
+		db = db.Set("gorm:table_options", *data.Options)
 	}
-	return Db.AutoMigrate(model)
+	err = db.AutoMigrate(data.Model)
+	if err != nil {
+		return
+	}
+	return
 }
