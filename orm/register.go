@@ -53,6 +53,10 @@ func RegisterModel(models ...interface{}) (err error) {
 		if options != "" {
 			data.Options = &options
 		}
+		tableRename := getTableRename(val)
+		if tableRename != "" {
+			data.Rename = &tableRename
+		}
 		err = createTable(data)
 		if err != nil {
 			return
