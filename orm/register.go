@@ -22,8 +22,9 @@ func RegisterModel(models ...interface{}) (err error) {
 		if val.Elem().Kind() == reflect.Slice {
 			val = reflect.New(val.Elem().Type().Elem())
 		}
-		options := ""
-		sign := ""
+		data := createTableData{Model: model}
+		// 获取Option
+		var options, sign string
 		tableEngine := getTableEngine(val)
 		if tableEngine != "" {
 			options += sign + "ENGINE=" + tableEngine
@@ -49,10 +50,10 @@ func RegisterModel(models ...interface{}) (err error) {
 			options += sign + "COMMENT='" + tableComment + "'"
 			sign = " "
 		}
-		data := createTableData{Model: model}
 		if options != "" {
 			data.Options = &options
 		}
+		// 是否修改表名
 		tableRename := getTableRename(val)
 		if tableRename != "" {
 			data.Rename = &tableRename
