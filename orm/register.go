@@ -62,9 +62,9 @@ func getFullName(typ reflect.Type) string {
 	return typ.PkgPath() + "." + typ.Name()
 }
 
-// getTableEngine Get model struct table engine
-func getTableEngine(val reflect.Value) string {
-	if fun := val.MethodByName("TableEngine"); fun.IsValid() {
+// getOrmString 获取表设置字符串相关类型
+func getOrmString(val reflect.Value, key string) string {
+	if fun := val.MethodByName(key); fun.IsValid() {
 		values := fun.Call([]reflect.Value{})
 		if len(values) > 0 && values[0].Kind() == reflect.String {
 			return values[0].String()
@@ -73,42 +73,9 @@ func getTableEngine(val reflect.Value) string {
 	return ""
 }
 
-// getTableComment Get model struct table comment
-func getTableComment(val reflect.Value) string {
-	if fun := val.MethodByName("TableComment"); fun.IsValid() {
-		values := fun.Call([]reflect.Value{})
-		if len(values) > 0 && values[0].Kind() == reflect.String {
-			return values[0].String()
-		}
-	}
-	return ""
-}
-
-// getTableCharset Get model struct table charset
-func getTableCharset(val reflect.Value) string {
-	if fun := val.MethodByName("TableCharset"); fun.IsValid() {
-		values := fun.Call([]reflect.Value{})
-		if len(values) > 0 && values[0].Kind() == reflect.String {
-			return values[0].String()
-		}
-	}
-	return ""
-}
-
-// getTableCollate Get model struct table collate
-func getTableCollate(val reflect.Value) string {
-	if fun := val.MethodByName("TableCollate"); fun.IsValid() {
-		values := fun.Call([]reflect.Value{})
-		if len(values) > 0 && values[0].Kind() == reflect.String {
-			return values[0].String()
-		}
-	}
-	return ""
-}
-
-// getTableAutoIncrement Get model struct table auto increment
-func getTableAutoIncrement(val reflect.Value) int64 {
-	if fun := val.MethodByName("TableAutoIncrement"); fun.IsValid() {
+// getOrmInt64 获取表设置整型相关类型
+func getOrmInt64(val reflect.Value, key string) int64 {
+	if fun := val.MethodByName(key); fun.IsValid() {
 		values := fun.Call([]reflect.Value{})
 		if len(values) > 0 && values[0].Kind() == reflect.Int64 {
 			return values[0].Int()
@@ -117,13 +84,37 @@ func getTableAutoIncrement(val reflect.Value) int64 {
 	return 0
 }
 
+// getTableEngine Get model struct table engine
+func getTableEngine(val reflect.Value) string {
+	return getOrmString(val, "TableEngine")
+}
+
+// getTableComment Get model struct table comment
+func getTableComment(val reflect.Value) string {
+	return getOrmString(val, "TableComment")
+}
+
+// getTableCharset Get model struct table charset
+func getTableCharset(val reflect.Value) string {
+	return getOrmString(val, "TableCharset")
+}
+
+// getTableCollate Get model struct table collate
+func getTableCollate(val reflect.Value) string {
+	return getOrmString(val, "TableCollate")
+}
+
+// getTableAutoIncrement Get model struct table auto increment
+func getTableAutoIncrement(val reflect.Value) int64 {
+	return getOrmInt64(val, "TableAutoIncrement")
+}
+
 // getTableName Get model struct table name
 func getTableName(val reflect.Value) string {
-	if fun := val.MethodByName("TableName"); fun.IsValid() {
-		values := fun.Call([]reflect.Value{})
-		if len(values) > 0 && values[0].Kind() == reflect.String {
-			return values[0].String()
-		}
-	}
-	return ""
+	return getOrmString(val, "TableName")
+}
+
+// getTableRename Get model struct table rename
+func getTableRename(val reflect.Value) string {
+	return getOrmString(val, "TableRename")
 }

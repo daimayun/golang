@@ -24,3 +24,8 @@ type IOptionTableCollate interface {
 type IOptionTableAutoIncrement interface {
 	TableAutoIncrement() int64
 }
+
+// IOptionTableRename 重命名表
+type IOptionTableRename interface {
+	TableRename() string
+}
