@@ -93,6 +93,17 @@ func getOrmInt64(val reflect.Value, key string) int64 {
 	return 0
 }
 
+// getOrmSliceString 获取表设置字符串切片相关类型
+func getOrmSliceString(val reflect.Value, key string) []string {
+	if fun := val.MethodByName(key); fun.IsValid() {
+		values := fun.Call([]reflect.Value{})
+		if len(values) > 0 && values[0].Kind() == reflect.Slice {
+			return values[0].Interface().([]string)
+		}
+	}
+	return []string{}
+}
+
 // getTableEngine Get model struct table engine
 func getTableEngine(val reflect.Value) string {
 	return getOrmString(val, "TableEngine")
@@ -126,4 +137,29 @@ func getTableName(val reflect.Value) string {
 // getTableRename Get model struct table rename
 func getTableRename(val reflect.Value) string {
 	return getOrmString(val, "TableRename")
+}
+
+// getTableAddColumn Get model struct table add column
+func getTableAddColumn(val reflect.Value) []string {
+	return getOrmSliceString(val, "TableAddColumn")
+}
+
+// getTableDropColumn Get model struct table drop column
+func getTableDropColumn(val reflect.Value) []string {
+	return getOrmSliceString(val, "TableDropColumn")
+}
+
+// getTableAlterColumn Get model struct table alter column
+func getTableAlterColumn(val reflect.Value) []string {
+	return getOrmSliceString(val, "TableAlterColumn")
+}
+
+// getTableCreateIndex Get model struct table create index
+func getTableCreateIndex(val reflect.Value) []string {
+	return getOrmSliceString(val, "TableCreateIndex")
+}
+
+// getTableDropIndex Get model struct table drop index
+func getTableDropIndex(val reflect.Value) []string {
+	return getOrmSliceString(val, "TableDropIndex")
 }

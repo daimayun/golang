@@ -29,3 +29,28 @@ type IOptionTableAutoIncrement interface {
 type IOptionTableRename interface {
 	TableRename() string
 }
+
+// IOptionTableAddColumn 表添加字段
+type IOptionTableAddColumn interface {
+	TableAddColumn() []string
+}
+
+// IOptionTableDropColumn 表删除字段
+type IOptionTableDropColumn interface {
+	TableDropColumn() []string
+}
+
+// IOptionTableAlterColumn 表修改字段
+type IOptionTableAlterColumn interface {
+	TableAlterColumn() []string
+}
+
+// IOptionTableCreateIndex 表添加索引
+type IOptionTableCreateIndex interface {
+	TableCreateIndex() []string
+}
+
+// IOptionTableDropIndex 表删除索引
+type IOptionTableDropIndex interface {
+	TableDropIndex() []string
+}
