@@ -3,7 +3,9 @@ package orm
 import (
 	"fmt"
 	"github.com/daimayun/golang/conv"
+	"github.com/daimayun/golang/function"
 	"reflect"
+	"strings"
 )
 
 // RegisterModel 注册模型
@@ -57,6 +59,47 @@ func RegisterModel(models ...interface{}) (err error) {
 		tableRename := getTableRename(val)
 		if tableRename != "" {
 			data.Rename = &tableRename
+		}
+		var indexSlice []string
+		// 是否添加字段
+		tableAddColumn := getTableAddColumn(val)
+		if len(tableAddColumn) > 0 {
+			data.AddColumn = &tableAddColumn
+			for _, v := range tableAddColumn { // 处理普通索引
+				indexName := getFieldIndexName(function.GetValueByInterface(model), v)
+				if indexName != "" {
+					indexSlice = append(indexSlice, indexName)
+				}
+			}
+		}
+		// 是否修改字段
+		tableAlterColumn := getTableAlterColumn(val)
+		if len(tableAlterColumn) > 0 {
+			data.AlterColumn = &tableAlterColumn
+			for _, v := range tableAlterColumn { // 处理普通索引
+				indexName := getFieldIndexName(function.GetValueByInterface(model), v)
+				if indexName != "" {
+					indexSlice = append(indexSlice, indexName)
+				}
+			}
+		}
+		tableCreateIndex := getTableCreateIndex(val)
+		if len(tableCreateIndex) > 0 || len(indexSlice) > 0 {
+			indexSlice = append(indexSlice, tableCreateIndex...)
+		}
+		// 是否添加索引
+		if len(indexSlice) > 0 {
+			data.CreateIndex = &indexSlice
+		}
+		// 是否删除表字段
+		tableDropColumn := getTableDropColumn(val)
+		if len(tableDropColumn) > 0 {
+			data.DropColumn = &tableDropColumn
+		}
+		// 是否删除索引
+		tableDropIndex := getTableDropIndex(val)
+		if len(tableDropIndex) > 0 {
+			data.DropColumn = &tableDropIndex
 		}
 		err = createTable(data)
 		if err != nil {
@@ -162,4 +205,48 @@ func getTableCreateIndex(val reflect.Value) []string {
 // getTableDropIndex Get model struct table drop index
 func getTableDropIndex(val reflect.Value) []string {
 	return getOrmSliceString(val, "TableDropIndex")
+}
+
+// getFieldIndexName 获取字段索引名称
+func getFieldIndexName(model interface{}, field string) string {
+	label := "idx_"
+	str, ok := function.GetStructTag(model, field, "gorm")
+	if ok {
+		var hasIndex bool
+		var column, index string
+		arr := strings.Split(str, ";")
+		for _, v := range arr {
+			s := strings.Split(v, ":")
+			sLength := len(s)
+			if sLength > 0 {
+				if s[0] == "column" {
+					if sLength > 1 {
+						column = s[1]
+					}
+				}
+				if s[0] == "index" {
+					hasIndex = true
+					if sLength == 1 && column != "" {
+						break
+					}
+					if sLength == 2 {
+						index = s[1]
+						break
+					}
+				}
+			}
+		}
+		if hasIndex {
+			if index == "" && column != "" {
+				index = column
+			}
+			if index != "" {
+				if strings.Index(index, label) != 0 {
+					index = label + index
+				}
+				return index
+			}
+		}
+	}
+	return ""
 }
