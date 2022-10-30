@@ -99,7 +99,7 @@ func RegisterModel(models ...interface{}) (err error) {
 		// 是否删除索引
 		tableDropIndex := getTableDropIndex(val)
 		if len(tableDropIndex) > 0 {
-			data.DropColumn = &tableDropIndex
+			data.DropIndex = &tableDropIndex
 		}
 		err = createTable(data)
 		if err != nil {
