@@ -67,5 +67,65 @@ func createTable(data createTableData) (err error) {
 		}
 	}
 
+	// 是否添加字段
+	if data.AddColumn != nil {
+		for _, v := range *data.AddColumn {
+			if !(Db.Migrator().HasColumn(data.Model, v)) {
+				err = Db.Migrator().AddColumn(data.Model, v)
+				if err != nil {
+					return errors.New("Add Column error [" + err.Error() + "]")
+				}
+			}
+		}
+	}
+
+	// 是否修改字段
+	if data.AlterColumn != nil {
+		for _, v := range *data.AlterColumn {
+			if Db.Migrator().HasColumn(data.Model, v) {
+				err = Db.Migrator().AlterColumn(data.Model, v)
+				if err != nil {
+					return errors.New("Alter Column error [" + err.Error() + "]")
+				}
+			}
+		}
+	}
+
+	// 是否添加普通索引
+	if data.CreateIndex != nil {
+		for _, v := range *data.CreateIndex {
+			if !(Db.Migrator().HasIndex(data.Model, v)) {
+				err = Db.Migrator().CreateIndex(data.Model, v)
+				if err != nil {
+					return errors.New("Create index error [" + err.Error() + "]")
+				}
+			}
+		}
+	}
+
+	// 是否删除字段
+	if data.DropColumn != nil {
+		for _, v := range *data.DropColumn {
+			if Db.Migrator().HasColumn(data.Model, v) {
+				err = Db.Migrator().DropColumn(data.Model, v)
+				if err != nil {
+					return errors.New("Drop column error [" + err.Error() + "]")
+				}
+			}
+		}
+	}
+
+	// 是否删除索引
+	if data.DropIndex != nil {
+		for _, v := range *data.DropIndex {
+			if Db.Migrator().HasIndex(data.Model, v) {
+				err = Db.Migrator().DropIndex(data.Model, v)
+				if err != nil {
+					return errors.New("Drop index error [" + err.Error() + "]")
+				}
+			}
+		}
+	}
+
 	return
 }
