@@ -7,9 +7,14 @@ import (
 
 // 创建表数据
 type createTableData struct {
-	Model   interface{}
-	Options *string
-	Rename  *string
+	Model       interface{}
+	Options     *string
+	Rename      *string
+	AddColumn   *[]string
+	DropColumn  *[]string
+	AlterColumn *[]string
+	CreateIndex *[]string
+	DropIndex   *[]string
 }
 
 // 创建表
