@@ -1,4 +1,4 @@
-package times
+package date
 
 // 日期格式
 var (
