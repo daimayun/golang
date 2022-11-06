@@ -6,6 +6,7 @@ import (
 	"github.com/daimayun/golang/conv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/plugin/dbresolver"
 	"time"
 )
 
@@ -50,6 +51,12 @@ type Config struct {
 	MysqlConfig        mysql.Config
 	NotAutoCreateTable bool // 不自动创建表[默认自动创建表]
 	ForceResetTable    bool // 强制重置表[默认不强制重置表]
+}
+
+// ResolverConfig ORM读写分离配置数据
+type ResolverConfig struct {
+	Sources  []Config
+	Replicas []Config
 }
 
 // NewOrm 实例化ORM
@@ -102,4 +109,89 @@ func NewOrm(data Config) (*gorm.DB, error) {
 	sqlDB.SetConnMaxIdleTime(data.ConnMaxIdleTime)
 
 	return Db, nil
+}
+
+// NewResolverOrm 实例化读写分离ORM
+func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
+	if len(data.Replicas) == 0 {
+		if len(data.Sources) == 0 {
+			return NewOrm(Config{})
+		}
+		return NewOrm(data.Sources[0])
+	}
+
+	var err error
+	var sourcesConfigs, replicasConfigs []Config
+
+	for _, v := range data.Sources {
+		if v.Database == "" {
+			err = errors.New("source database not empty")
+			return Db, err
+		}
+		// 连接配置参数处理
+		sourcesConfigs = append(sourcesConfigs, v.handler())
+	}
+
+	for _, v := range data.Replicas {
+		if v.Database == "" {
+			err = errors.New("replica database not empty")
+			return Db, err
+		}
+		// 连接配置参数处理
+		replicasConfigs = append(replicasConfigs, v.handler())
+	}
+
+	for k, v := range sourcesConfigs {
+		if v.MysqlConfig.DSN == "" {
+			sourcesConfigs[k].MysqlConfig.DSN = dsnHandler(v)
+		}
+	}
+
+	for k, v := range replicasConfigs {
+		if v.MysqlConfig.DSN == "" {
+			replicasConfigs[k].MysqlConfig.DSN = dsnHandler(v)
+		}
+	}
+
+	// GORM MASTER OPEN
+	Db, err = gorm.Open(mysql.New(sourcesConfigs[0].MysqlConfig), sourcesConfigs[0].GormConfig)
+	if err != nil {
+		return Db, err
+	}
+
+	// Sources
+	var sourcesDialector, replicasDialector []gorm.Dialector
+	for _, v := range sourcesConfigs {
+		sourcesDialector = append(sourcesDialector, mysql.New(v.MysqlConfig))
+	}
+	for _, v := range replicasConfigs {
+		replicasDialector = append(replicasDialector, mysql.New(v.MysqlConfig))
+	}
+
+	// 是否自动创建表
+	notAutoCreateTable = sourcesConfigs[0].NotAutoCreateTable
+	// 是否强制重置表
+	forceResetTable = sourcesConfigs[0].ForceResetTable
+
+	// DBResolver
+	dbResolverConfig := dbresolver.Config{
+		Sources:  sourcesDialector,
+		Replicas: replicasDialector,
+		Policy:   dbresolver.RandomPolicy{},
+	}
+	err = Db.Use(dbresolver.Register(dbResolverConfig))
+	if err != nil {
+		return Db, err
+	}
+
+	return Db, nil
+}
+
+// DSN data source name
+func dsnHandler(data Config) string {
+	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
+	if !data.NotUseParseTime {
+		dsn += "&parseTime=" + ParseTimeTrueVal
+	}
+	return dsn
 }
