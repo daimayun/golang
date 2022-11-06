@@ -21,6 +21,7 @@ const (
 	DefaultMaxIdleConnects    = 10
 	DefaultMaxOpenConnects    = 100
 	DefaultConnectMaxLifetime = time.Hour
+	DefaultConnMaxIdleTime    = time.Hour
 
 	ParseTimeTrueVal = "True"
 )
@@ -44,6 +45,7 @@ type Config struct {
 	MaxIdleConnects    int
 	MaxOpenConnects    int
 	ConnectMaxLifetime time.Duration
+	ConnMaxIdleTime    time.Duration
 	GormConfig         *gorm.Config
 	MysqlConfig        mysql.Config
 	NotAutoCreateTable bool // 不自动创建表[默认自动创建表]
@@ -96,6 +98,8 @@ func NewOrm(data Config) (*gorm.DB, error) {
 	sqlDB.SetMaxOpenConns(data.MaxOpenConnects)
 	// 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(data.ConnectMaxLifetime)
+	// 设置连接使用最大时间
+	sqlDB.SetConnMaxIdleTime(data.ConnMaxIdleTime)
 
 	return Db, nil
 }

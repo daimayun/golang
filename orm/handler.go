@@ -32,5 +32,8 @@ func (data Config) handler() Config {
 	if data.ConnectMaxLifetime == 0 {
 		data.ConnectMaxLifetime = DefaultConnectMaxLifetime
 	}
+	if data.ConnMaxIdleTime == 0 {
+		data.ConnMaxIdleTime = DefaultConnMaxIdleTime
+	}
 	return data
 }
