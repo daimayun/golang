@@ -179,7 +179,11 @@ func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
 		Replicas: replicasDialector,
 		Policy:   dbresolver.RandomPolicy{},
 	}
-	err = Db.Use(dbresolver.Register(dbResolverConfig))
+	err = Db.Use(dbresolver.Register(dbResolverConfig).
+		SetConnMaxIdleTime(sourcesConfigs[0].ConnMaxIdleTime).
+		SetConnMaxLifetime(sourcesConfigs[0].ConnectMaxLifetime).
+		SetMaxIdleConns(sourcesConfigs[0].MaxIdleConnects).
+		SetMaxOpenConns(sourcesConfigs[0].MaxOpenConnects))
 	if err != nil {
 		return Db, err
 	}
