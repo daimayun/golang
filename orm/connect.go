@@ -50,6 +50,7 @@ type Config struct {
 	MysqlConfig        mysql.Config
 	NotAutoCreateTable bool // 不自动创建表[默认自动创建表]
 	ForceResetTable    bool // 强制重置表[默认不强制重置表]
+	Tables             []interface{}
 }
 
 // ResolverConfig ORM读写分离配置数据
@@ -106,22 +107,29 @@ func NewOrm(data Config) (*gorm.DB, error) {
 	return Db, nil
 }
 
-// NewResolverOrm 实例化读写分离ORM
+// NewResolverOrm 实例化读写分离/分库ORM
 func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
 	if len(data.Replicas) == 0 {
-		if len(data.Sources) == 0 {
+		sourcesLen := len(data.Sources)
+		if sourcesLen == 0 {
 			return NewOrm(Config{})
 		}
-		return NewOrm(data.Sources[0])
+		if sourcesLen == 1 {
+			return NewOrm(data.Sources[0])
+		}
 	}
 
 	var err error
 	var sourcesConfigs, replicasConfigs []Config
+	var isSubTables bool
 
 	for _, v := range data.Sources {
 		if v.Database == "" {
 			err = errors.New("source database not empty")
 			return Db, err
+		}
+		if len(v.Tables) > 0 {
+			isSubTables = true
 		}
 		// 连接配置参数处理
 		sourcesConfigs = append(sourcesConfigs, v.handler())
@@ -131,6 +139,9 @@ func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
 		if v.Database == "" {
 			err = errors.New("replica database not empty")
 			return Db, err
+		}
+		if len(v.Tables) > 0 {
+			isSubTables = true
 		}
 		// 连接配置参数处理
 		replicasConfigs = append(replicasConfigs, v.handler())
@@ -154,27 +165,49 @@ func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
 		return Db, err
 	}
 
-	// Sources
-	var sourcesDialector, replicasDialector []gorm.Dialector
-	for _, v := range sourcesConfigs {
-		sourcesDialector = append(sourcesDialector, mysql.New(v.MysqlConfig))
-	}
-	for _, v := range replicasConfigs {
-		replicasDialector = append(replicasDialector, mysql.New(v.MysqlConfig))
-	}
-
 	// 是否自动创建表
 	notAutoCreateTable = sourcesConfigs[0].NotAutoCreateTable
 	// 是否强制重置表
 	forceResetTable = sourcesConfigs[0].ForceResetTable
 
-	// DBResolver
-	dbResolverConfig := dbresolver.Config{
-		Sources:  sourcesDialector,
-		Replicas: replicasDialector,
-		Policy:   dbresolver.RandomPolicy{},
+	var dbResolver *dbresolver.DBResolver
+
+	if isSubTables {
+		for k, v := range sourcesConfigs {
+			dbConf := dbresolver.Config{
+				Sources: []gorm.Dialector{mysql.New(v.MysqlConfig)},
+			}
+			if k == 0 {
+				dbResolver = dbresolver.Register(dbConf, v.Tables...)
+				continue
+			}
+			dbResolver.Register(dbConf, v.Tables...)
+		}
+		for _, v := range replicasConfigs {
+			dbConf := dbresolver.Config{
+				Replicas: []gorm.Dialector{mysql.New(v.MysqlConfig)},
+			}
+			dbResolver.Register(dbConf, v.Tables...)
+		}
+	} else {
+		// Sources
+		var sourcesDialector, replicasDialector []gorm.Dialector
+		for _, v := range sourcesConfigs {
+			sourcesDialector = append(sourcesDialector, mysql.New(v.MysqlConfig))
+		}
+		for _, v := range replicasConfigs {
+			replicasDialector = append(replicasDialector, mysql.New(v.MysqlConfig))
+		}
+		// DBResolver
+		dbResolverConfig := dbresolver.Config{
+			Sources:  sourcesDialector,
+			Replicas: replicasDialector,
+			Policy:   dbresolver.RandomPolicy{},
+		}
+		dbResolver = dbresolver.Register(dbResolverConfig)
 	}
-	err = Db.Use(dbresolver.Register(dbResolverConfig).
+
+	err = Db.Use(dbResolver.
 		SetConnMaxIdleTime(sourcesConfigs[0].ConnMaxIdleTime).
 		SetConnMaxLifetime(sourcesConfigs[0].ConnectMaxLifetime).
 		SetMaxIdleConns(sourcesConfigs[0].MaxIdleConnects).
