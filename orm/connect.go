@@ -3,7 +3,6 @@ package orm
 import (
 	"database/sql"
 	"errors"
-	"github.com/daimayun/golang/conv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
@@ -73,12 +72,8 @@ func NewOrm(data Config) (*gorm.DB, error) {
 	data = data.handler()
 
 	// DSN data source name
-	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
-	if !data.NotUseParseTime {
-		dsn += "&parseTime=" + ParseTimeTrueVal
-	}
 	if data.MysqlConfig.DSN == "" {
-		data.MysqlConfig.DSN = dsn
+		data.MysqlConfig.DSN = dsnHandler(data)
 	}
 
 	// GORM OPEN
@@ -189,13 +184,4 @@ func NewResolverOrm(data ResolverConfig) (*gorm.DB, error) {
 	}
 
 	return Db, nil
-}
-
-// DSN data source name
-func dsnHandler(data Config) string {
-	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
-	if !data.NotUseParseTime {
-		dsn += "&parseTime=" + ParseTimeTrueVal
-	}
-	return dsn
 }

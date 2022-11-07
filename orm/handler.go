@@ -1,5 +1,7 @@
 package orm
 
+import "github.com/daimayun/golang/conv"
+
 // Handel ORM连接配置参数处理助手
 func (data Config) handler() Config {
 	if data.Host == "" {
@@ -36,4 +38,13 @@ func (data Config) handler() Config {
 		data.ConnMaxIdleTime = DefaultConnMaxIdleTime
 	}
 	return data
+}
+
+// DSN data source name
+func dsnHandler(data Config) string {
+	dsn := data.UserName + ":" + data.Password + "@" + data.NetWork + "(" + data.Host + ":" + conv.IntToString(data.Port) + ")/" + data.Database + "?charset=" + data.Charset + "&loc=" + data.Loc
+	if !data.NotUseParseTime {
+		dsn += "&parseTime=" + ParseTimeTrueVal
+	}
+	return dsn
 }
