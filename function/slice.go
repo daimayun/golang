@@ -153,3 +153,13 @@ func SliceShuffle[T any](slice *[]T) {
 		(*slice)[i], (*slice)[num] = (*slice)[num], (*slice)[i]
 	}
 }
+
+// SliceReverse 切片反转
+func SliceReverse[T any](slice []T) []T {
+	var newSlice []T
+	l := len(slice)
+	for i := l - 1; i >= 0; i-- {
+		newSlice = append(newSlice, slice[i])
+	}
+	return newSlice
+}

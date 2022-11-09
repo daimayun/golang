@@ -373,3 +373,26 @@ func TestSliceShuffle(t *testing.T) {
 		t.Error("SliceShuffle() error.")
 	}
 }
+
+func TestSliceReverse(t *testing.T) {
+	slice := []string{"e", "d", "c", "b", "a"}
+	newSlice := SliceReverse(slice)
+	if len(slice) != len(newSlice) {
+		t.Error("SliceReverse() error.")
+	}
+	if newSlice[0] != "a" {
+		t.Error("SliceReverse() error.")
+	}
+	if newSlice[1] != "b" {
+		t.Error("SliceReverse() error.")
+	}
+	if newSlice[2] != "c" {
+		t.Error("SliceReverse() error.")
+	}
+	if newSlice[3] != "d" {
+		t.Error("SliceReverse() error.")
+	}
+	if newSlice[4] != "e" {
+		t.Error("SliceReverse() error.")
+	}
+}
