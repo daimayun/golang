@@ -101,3 +101,18 @@ func Keys(keys string) ([]string, error) {
 func Persist(key string) (bool, error) {
 	return rds.Bool(Cmd("persist", key))
 }
+
+// Incr 自增+1
+func Incr(key string) (int64, error) {
+	return rds.Int64(Exec("incr", key))
+}
+
+// Decr 自减-1
+func Decr(key string) (int64, error) {
+	return rds.Int64(Exec("decr", key))
+}
+
+// Exists 检测KEY是否存在
+func Exists(key string) (bool, error) {
+	return rds.Bool(Exec("exists", key))
+}
