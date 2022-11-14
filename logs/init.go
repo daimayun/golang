@@ -57,7 +57,11 @@ func Error(v ...interface{}) {
 }
 
 func Fatal(v ...interface{}) {
-	writeLog(FATAL, v...)
+	f := openLogFile(getLogFileFullPath(strings.ToLower(levelFlags[FATAL])))
+	defer f.Close()
+	logger := NewLogger(f)
+	logger.SetPrefix(getPrefix(FATAL))
+	logger.Fatalln(v)
 }
 
 func Orm(v ...interface{}) {
