@@ -6,17 +6,15 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 type Level int
 
 var (
-	F                  *os.File
 	DefaultPrefix      = ""
 	DefaultCallerDepth = 2
-	logger             *log.Logger
-	logPrefix          = ""
-	levelFlags         = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL", "ORM"}
+	levelFlags         = map[Level]string{DEBUG: "DEBUG", INFO: "INFO", WARNING: "WARN", ERROR: "ERROR", FATAL: "FATAL", ORM: "ORM"}
 )
 
 const (
@@ -29,47 +27,55 @@ const (
 )
 
 func init() {
-	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
-	logger = log.New(F, DefaultPrefix, log.LstdFlags)
+	for _, label := range levelFlags {
+		createLogFile(getLogFileFullPath(strings.ToLower(label)))
+	}
+}
+
+func NewLogger(f *os.File) *log.Logger {
+	return log.New(f, DefaultPrefix, log.LstdFlags)
 }
 
 func Debug(v ...interface{}) {
-	setPrefix(DEBUG)
-	logger.Println(v)
+	writeLog(DEBUG, v...)
 }
 
 func Info(v ...interface{}) {
-	setPrefix(INFO)
-	logger.Println(v)
+	writeLog(INFO, v...)
 }
 
 func Warn(v ...interface{}) {
-	setPrefix(WARNING)
-	logger.Println(v)
+	writeLog(WARNING, v...)
+}
+
+func Warning(v ...interface{}) {
+	Warn(v...)
 }
 
 func Error(v ...interface{}) {
-	setPrefix(ERROR)
-	logger.Println(v)
+	writeLog(ERROR, v...)
 }
 
 func Fatal(v ...interface{}) {
-	setPrefix(FATAL)
-	logger.Fatalln(v)
+	writeLog(FATAL, v...)
 }
 
 func Orm(v ...interface{}) {
-	setPrefix(ORM)
+	writeLog(ORM, v...)
+}
+
+func writeLog(level Level, v ...interface{}) {
+	f := openLogFile(getLogFileFullPath(strings.ToLower(levelFlags[level])))
+	defer f.Close()
+	logger := NewLogger(f)
+	logger.SetPrefix(getPrefix(level))
 	logger.Println(v)
 }
 
-func setPrefix(level Level) {
+func getPrefix(level Level) string {
 	_, file, line, ok := runtime.Caller(DefaultCallerDepth)
 	if ok {
-		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(file), line)
-	} else {
-		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
+		return fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(file), line)
 	}
-	logger.SetPrefix(logPrefix)
+	return fmt.Sprintf("[%s]", levelFlags[level])
 }

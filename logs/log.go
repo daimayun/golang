@@ -20,13 +20,14 @@ func getLogFilePath() string {
 }
 
 // 获取日志的文件名和路径名
-func getLogFileFullPath() string {
+func getLogFileFullPath(label string) string {
 	prefixPath := getLogFilePath()
-	suffixPath := fmt.Sprintf("%s.%s.%s", LogSaveName, time.Now().Format(TimeFormat), LogFileExt)
+	suffixPath := fmt.Sprintf("%s.%s.%s.%s", LogSaveName, label, time.Now().Format(TimeFormat), LogFileExt)
 	return fmt.Sprintf("%s%s", prefixPath, suffixPath)
 }
 
-func openLogFile(filePath string) *os.File {
+// 创建日志文件
+func createLogFile(filePath string) {
 	_, err := os.Stat(filePath)
 	switch {
 	case os.IsNotExist(err):
@@ -34,6 +35,11 @@ func openLogFile(filePath string) *os.File {
 	case os.IsPermission(err):
 		log.Fatalf("Permission :%v", err)
 	}
+}
+
+// 打开文件并返回句柄，如果文件不存在则创建
+func openLogFile(filePath string) *os.File {
+	createLogFile(filePath)
 	handle, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Fail to OpenFile :%v", err)
@@ -41,6 +47,7 @@ func openLogFile(filePath string) *os.File {
 	return handle
 }
 
+// 创建文件夹
 func mkDir() {
 	dir, _ := os.Getwd()
 	err := os.MkdirAll(dir+"/"+getLogFilePath(), os.ModePerm)
