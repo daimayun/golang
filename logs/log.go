@@ -26,6 +26,14 @@ func getLogFileFullPath(label string) string {
 	return fmt.Sprintf("%s%s", prefixPath, suffixPath)
 }
 
+// 获取ORM记录日志的句柄
+func getOrmFile() *os.File {
+	prefixPath := getLogFilePath()
+	suffixPath := fmt.Sprintf("%s.%s.%s", LogSaveName, "orm", LogFileExt)
+	filePath := fmt.Sprintf("%s%s", prefixPath, suffixPath)
+	return openLogFile(filePath)
+}
+
 // 创建日志文件
 func createLogFile(filePath string) {
 	_, err := os.Stat(filePath)
