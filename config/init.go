@@ -34,7 +34,7 @@ func NewYamlConf(path, fileName string) error {
 func NewConf(path, fileName, style string) (err error) {
 	Conf = viper.New()
 	Conf.AddConfigPath(path)
-	Conf.SetConfigFile(fileName)
+	Conf.SetConfigName(fileName)
 	Conf.SetConfigType(style)
 	if err = Conf.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
