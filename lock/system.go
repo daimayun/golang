@@ -31,3 +31,8 @@ func GetSet(key interface{}, ttl ...uint64) (isExistLock bool) {
 func Del(key interface{}) {
 	delete(memoryCache, key)
 }
+
+// Empty 清空所有锁
+func Empty() {
+	memoryCache = map[interface{}]struct{}{}
+}
