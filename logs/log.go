@@ -2,6 +2,8 @@ package logs
 
 import (
 	"fmt"
+	"github.com/daimayun/golang/file"
+	"github.com/daimayun/golang/random"
 	"log"
 	"os"
 	"time"
@@ -31,6 +33,10 @@ func GetOrmFile() *os.File {
 	prefixPath := getLogFilePath()
 	suffixPath := fmt.Sprintf("%s.%s.%s", LogSaveName, "orm", LogFileExt)
 	filePath := fmt.Sprintf("%s%s", prefixPath, suffixPath)
+	if file.Exists(filePath) {
+		suffixPath = fmt.Sprintf("%s.%s.%s.%s", LogSaveName, "orm", random.NumberString(), LogFileExt)
+		_ = os.Rename(filePath, fmt.Sprintf("%s%s", prefixPath, suffixPath))
+	}
 	return openLogFile(filePath)
 }
 
