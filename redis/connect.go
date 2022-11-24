@@ -2,6 +2,7 @@ package redis
 
 import (
 	"github.com/daimayun/golang/conv"
+	"github.com/go-redsync/redsync"
 	rds "github.com/gomodule/redigo/redis"
 	"time"
 )
@@ -39,6 +40,9 @@ const (
 
 // Rds Redis
 var Rds *redisServer
+
+// redisLock 锁
+var redisLock *redsync.Redsync
 
 func (data Data) handel() Data {
 	if data.Host == "" {
@@ -87,5 +91,10 @@ func NewRedis(data Data) {
 				rds.DialDatabase(data.Database),
 			)
 		},
+		TestOnBorrow: func(c rds.Conn, t time.Time) error {
+			_, err := c.Do("PING")
+			return err
+		},
 	}
+	redisLock = redsync.New([]redsync.Pool{Rds.Pool})
 }
