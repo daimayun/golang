@@ -21,7 +21,7 @@ func GetSet(key interface{}, ttl ...uint64) (isExistLock bool) {
 	}
 	go func(key interface{}, ttl uint64) {
 		time.AfterFunc(time.Second*time.Duration(ttl), func() {
-			delete(memoryCache, key)
+			Del(key)
 		})
 	}(key, delTtl)
 	return
