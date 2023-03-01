@@ -1,9 +1,8 @@
-module golang
+module github.com/daimayun/golang
 
 go 1.20
 
 require (
-	github.com/daimayun/golang v0.1.45
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
