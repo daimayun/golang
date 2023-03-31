@@ -268,6 +268,9 @@ func BeforeMonthTime(months int, ts ...time.Time) time.Time {
 	}
 	res := t.AddDate(0, -months, 28-day)
 	newMonth := int(res.Month())
+	if day == 29 && newMonth != 2 {
+		return normal
+	}
 	nowMonth := int(t.Month())
 	if _, ok := day30[nowMonth]; ok {
 		if newMonth != 2 {
@@ -284,8 +287,14 @@ func BeforeMonthTime(months int, ts ...time.Time) time.Time {
 			return normal
 		}
 	}
-	if nowMonth == 2 && newMonth != 2 {
-		return normal
+	if nowMonth == 2 {
+		if newMonth == 2 {
+			if FebruaryIsLeapYear(res.Year()) == FebruaryIsLeapYear(t.Year()) {
+				return normal
+			}
+		} else {
+			return normal
+		}
 	}
 	return res
 }
@@ -322,6 +331,9 @@ func AfterMonthTime(months int, ts ...time.Time) time.Time {
 	}
 	res := t.AddDate(0, months, 28-day)
 	newMonth := int(res.Month())
+	if day == 29 && newMonth != 2 {
+		return normal
+	}
 	nowMonth := int(t.Month())
 	if _, ok := day30[nowMonth]; ok {
 		if newMonth != 2 {
@@ -338,8 +350,14 @@ func AfterMonthTime(months int, ts ...time.Time) time.Time {
 			return normal
 		}
 	}
-	if nowMonth == 2 && newMonth != 2 {
-		return normal
+	if nowMonth == 2 {
+		if newMonth == 2 {
+			if FebruaryIsLeapYear(res.Year()) == FebruaryIsLeapYear(t.Year()) {
+				return normal
+			}
+		} else {
+			return normal
+		}
 	}
 	return res
 }
