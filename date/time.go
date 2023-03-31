@@ -261,12 +261,52 @@ func BeforeMonthTime(months int, ts ...time.Time) time.Time {
 	if len(ts) > 0 {
 		t = ts[0]
 	}
-	days := 0
+	normal := t.AddDate(0, -months, 0)
 	day := t.Day()
-	if day > 28 {
-		days = 28 - day
+	if day <= 28 {
+		return normal
 	}
-	return t.AddDate(0, -months, days)
+	res := t.AddDate(0, -months, 28-day)
+	newMonth := int(res.Month())
+	nowMonth := int(t.Month())
+	if _, ok := day30[nowMonth]; ok {
+		if newMonth != 2 {
+			return normal
+		}
+	}
+	if _, ok := day31[nowMonth]; ok {
+		if day <= 30 {
+			if newMonth != 2 {
+				return normal
+			}
+		}
+		if _, ok = day31[newMonth]; ok {
+			return normal
+		}
+	}
+	if nowMonth == 2 && newMonth != 2 {
+		return normal
+	}
+	return res
+}
+
+// 31天的月份列表
+var day31 = map[int]struct{}{
+	1:  {},
+	3:  {},
+	5:  {},
+	7:  {},
+	8:  {},
+	10: {},
+	12: {},
+}
+
+// 30天的月份列表
+var day30 = map[int]struct{}{
+	4:  {},
+	5:  {},
+	9:  {},
+	11: {},
 }
 
 // AfterMonthTime N月后的当前时间
@@ -275,12 +315,33 @@ func AfterMonthTime(months int, ts ...time.Time) time.Time {
 	if len(ts) > 0 {
 		t = ts[0]
 	}
-	days := 0
+	normal := t.AddDate(0, months, 0)
 	day := t.Day()
-	if day > 28 {
-		days = 28 - day
+	if day <= 28 {
+		return normal
 	}
-	return t.AddDate(0, months, days)
+	res := t.AddDate(0, months, 28-day)
+	newMonth := int(res.Month())
+	nowMonth := int(t.Month())
+	if _, ok := day30[nowMonth]; ok {
+		if newMonth != 2 {
+			return normal
+		}
+	}
+	if _, ok := day31[nowMonth]; ok {
+		if day <= 30 {
+			if newMonth != 2 {
+				return normal
+			}
+		}
+		if _, ok = day31[newMonth]; ok {
+			return normal
+		}
+	}
+	if nowMonth == 2 && newMonth != 2 {
+		return normal
+	}
+	return res
 }
 
 // BeforeYearTime N年前的当前时间
