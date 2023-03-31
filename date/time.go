@@ -268,9 +268,15 @@ func BeforeMonthTime(months int, ts ...time.Time) time.Time {
 	}
 	res := t.AddDate(0, -months, 28-day)
 	newMonth := int(res.Month())
-	// 闰年二月
-	if day == 29 && newMonth != 2 {
-		return normal
+	if day == 29 {
+		if newMonth == 2 {
+			// 闰年二月
+			if FebruaryIsLeapYear(res.Year()) {
+				return normal
+			}
+		} else {
+			return normal
+		}
 	}
 	nowMonth := int(t.Month())
 	if _, ok := day30[nowMonth]; ok {
@@ -332,9 +338,15 @@ func AfterMonthTime(months int, ts ...time.Time) time.Time {
 	}
 	res := t.AddDate(0, months, 28-day)
 	newMonth := int(res.Month())
-	// 闰年二月
-	if day == 29 && newMonth != 2 {
-		return normal
+	if day == 29 {
+		if newMonth == 2 {
+			// 闰年二月
+			if FebruaryIsLeapYear(res.Year()) {
+				return normal
+			}
+		} else {
+			return normal
+		}
 	}
 	nowMonth := int(t.Month())
 	if _, ok := day30[nowMonth]; ok {
