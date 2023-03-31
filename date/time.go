@@ -262,7 +262,7 @@ func BeforeMonthTime(months int, ts ...time.Time) time.Time {
 		t = ts[0]
 	}
 	days := 0
-	day := TimeNow().Day()
+	day := t.Day()
 	if day > 28 {
 		days = 28 - day
 	}
@@ -276,7 +276,7 @@ func AfterMonthTime(months int, ts ...time.Time) time.Time {
 		t = ts[0]
 	}
 	days := 0
-	day := TimeNow().Day()
+	day := t.Day()
 	if day > 28 {
 		days = 28 - day
 	}
