@@ -1,6 +1,9 @@
 package sort
 
-import "github.com/daimayun/golang/base"
+import (
+	"github.com/daimayun/golang/base"
+	systemSort "sort"
+)
 
 // BubbleSort 冒泡排序[默认升序]
 func BubbleSort[T base.Number](arr []T, desc ...bool) []T {
@@ -10,18 +13,14 @@ func BubbleSort[T base.Number](arr []T, desc ...bool) []T {
 			asc = false
 		}
 	}
-	for i := 0; i < len(arr)-1; i++ {
-		for j := 0; j < len(arr)-1-i; j++ {
-			if asc {
-				if arr[j] > arr[j+1] {
-					arr[j], arr[j+1] = arr[j+1], arr[j]
-				}
-			} else {
-				if arr[j] < arr[j+1] {
-					arr[j], arr[j+1] = arr[j+1], arr[j]
-				}
-			}
-		}
+	if asc {
+		systemSort.Slice(arr, func(i, j int) bool {
+			return arr[i] < arr[j]
+		})
+	} else {
+		systemSort.Slice(arr, func(i, j int) bool {
+			return arr[i] > arr[j]
+		})
 	}
 	return arr
 }
