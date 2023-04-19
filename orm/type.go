@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-type MyTime time.Time
+type Time time.Time
 
 // MarshalJSON Json后的数据处理
-func (t MyTime) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + time.Time(t).Format("2006-01-02 15:04:05") + `"`), nil
+func (t Time) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + time.Time(t).In(time.Local).Format("2006-01-02 15:04:05") + `"`), nil
 }
 
 // Value 存入数据库
-func (t MyTime) Value() (driver.Value, error) {
+func (t Time) Value() (driver.Value, error) {
 	return time.Time(t), nil
 }
 

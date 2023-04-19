@@ -7,12 +7,12 @@ import (
 )
 
 type Users struct {
-	ID        int64      `json:"id" gorm:"column:id;primaryKey;not_null;autoIncrement;comment:ID"`
-	Name      string     `json:"name" gorm:"type:varchar(255);comment:用户名"`
-	Image     orm.List   `json:"image" gorm:"type:varchar(1000);comment:用户图片列表"`
-	Mix       orm.List   `json:"mix" gorm:"type:varchar(1000);comment:混合存储列表"`
-	CreatedAt orm.MyTime `json:"created_at" gorm:"type:datetime;comment:创建日期"`
-	UpdatedAt time.Time  `json:"updated_at" gorm:"type:datetime;comment:更新日期"`
+	ID        int64     `json:"id" gorm:"column:id;primaryKey;not_null;autoIncrement;comment:ID"`
+	Name      string    `json:"name" gorm:"type:varchar(255);comment:用户名"`
+	Image     orm.List  `json:"image" gorm:"type:varchar(1000);comment:用户图片列表"`
+	Mix       orm.List  `json:"mix" gorm:"type:varchar(1000);comment:混合存储列表"`
+	CreatedAt orm.Time  `json:"created_at" gorm:"type:datetime;comment:创建日期"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"type:datetime;comment:更新日期"`
 }
 
 func (*Users) TableName() string {
