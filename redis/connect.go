@@ -12,31 +12,108 @@ type redisServer struct {
 	Pool *rds.Pool
 }
 
-// Data 连接数据
-type Data struct {
-	Host           string        `json:"host"`
-	Port           int           `json:"port"`
-	Password       string        `json:"password"`
-	Database       int           `json:"database"`
-	NetWork        string        `json:"net_work"`
-	MaxIdle        int           `json:"max_idle"`
-	MaxActive      int           `json:"max_active"`
-	IdleTimeout    time.Duration `json:"idle_timeout"`
-	ReadTimeout    time.Duration `json:"read_timeout"`
-	WriteTimeout   time.Duration `json:"write_timeout"`
-	ConnectTimeout time.Duration `json:"connect_timeout"`
+// configOptions REDIS配置数据
+type configOptions struct {
+	Host           string
+	Port           int
+	Password       string
+	Database       int
+	NetWork        string
+	MaxIdle        int
+	MaxActive      int
+	IdleTimeout    time.Duration
+	ReadTimeout    time.Duration
+	WriteTimeout   time.Duration
+	ConnectTimeout time.Duration
 }
 
-const (
-	DefaultHost           = "127.0.0.1"
-	DefaultPort           = 6379
-	DefaultMaxIdle        = 10
-	DefaultIdleTimeout    = time.Hour
-	DefaultNetWork        = "tcp"
-	DefaultReadTimeout    = time.Second
-	DefaultWriteTimeout   = time.Second
-	DefaultConnectTimeout = time.Second
-)
+type Option func(*configOptions)
+
+func WithHost(host string) Option {
+	return func(options *configOptions) {
+		options.Host = host
+	}
+}
+
+func WithPort(port int) Option {
+	return func(options *configOptions) {
+		options.Port = port
+	}
+}
+
+func WithPassword(password string) Option {
+	return func(options *configOptions) {
+		options.Password = password
+	}
+}
+
+func WithDatabase(database int) Option {
+	return func(options *configOptions) {
+		options.Database = database
+	}
+}
+
+func WithNetWork(netWork string) Option {
+	return func(options *configOptions) {
+		options.NetWork = netWork
+	}
+}
+
+func WithMaxIdle(maxIdle int) Option {
+	return func(options *configOptions) {
+		options.MaxIdle = maxIdle
+	}
+}
+
+func WithMaxActive(maxActive int) Option {
+	return func(options *configOptions) {
+		options.MaxActive = maxActive
+	}
+}
+
+func WithIdleTimeout(idleTimeout time.Duration) Option {
+	return func(options *configOptions) {
+		options.IdleTimeout = idleTimeout
+	}
+}
+
+func WithReadTimeout(readTimeout time.Duration) Option {
+	return func(options *configOptions) {
+		options.ReadTimeout = readTimeout
+	}
+}
+
+func WithWriteTimeout(writeTimeout time.Duration) Option {
+	return func(options *configOptions) {
+		options.WriteTimeout = writeTimeout
+	}
+}
+
+func WithConnectTimeout(connectTimeout time.Duration) Option {
+	return func(options *configOptions) {
+		options.ConnectTimeout = connectTimeout
+	}
+}
+
+func newOptions(options ...Option) configOptions {
+	configOpts := &configOptions{
+		Host:           "127.0.0.1",
+		Port:           6379,
+		Password:       "",
+		Database:       0,
+		NetWork:        "tcp",
+		MaxIdle:        10,
+		MaxActive:      0,
+		IdleTimeout:    time.Hour,
+		ReadTimeout:    time.Second,
+		WriteTimeout:   time.Second,
+		ConnectTimeout: time.Second,
+	}
+	for _, option := range options {
+		option(configOpts)
+	}
+	return *configOpts
+}
 
 // Rds Redis
 var Rds *redisServer
@@ -44,37 +121,9 @@ var Rds *redisServer
 // redisLock 锁
 var redisLock *redsync.Redsync
 
-func (data Data) handel() Data {
-	if data.Host == "" {
-		data.Host = DefaultHost
-	}
-	if data.Port == 0 {
-		data.Port = DefaultPort
-	}
-	if data.MaxIdle == 0 {
-		data.MaxIdle = DefaultMaxIdle
-	}
-	if data.NetWork == "" {
-		data.NetWork = DefaultNetWork
-	}
-	if data.IdleTimeout == 0 {
-		data.IdleTimeout = DefaultIdleTimeout
-	}
-	if data.ReadTimeout == 0 {
-		data.ReadTimeout = DefaultReadTimeout
-	}
-	if data.WriteTimeout == 0 {
-		data.WriteTimeout = DefaultWriteTimeout
-	}
-	if data.ConnectTimeout == 0 {
-		data.ConnectTimeout = DefaultConnectTimeout
-	}
-	return data
-}
-
 // NewRedis 实例化Redis
-func NewRedis(data Data) {
-	data = data.handel()
+func NewRedis(options ...Option) {
+	data := newOptions(options...)
 	Rds = new(redisServer)
 	Rds.Pool = &rds.Pool{
 		MaxIdle:     data.MaxIdle,
