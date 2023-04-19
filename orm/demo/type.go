@@ -6,7 +6,7 @@ import (
 	"github.com/daimayun/golang/orm"
 )
 
-type User struct {
+type Users struct {
 	ID        int64      `json:"id" gorm:"column:id;primaryKey;not_null;autoIncrement;comment:ID"`
 	Name      string     `json:"name" gorm:"type:varchar(255);comment:用户名"`
 	Image     orm.List   `json:"image" gorm:"type:varchar(1000);comment:用户图片列表"`
@@ -15,16 +15,16 @@ type User struct {
 	UpdatedAt time.Time  `json:"updated_at" gorm:"type:datetime;comment:更新日期"`
 }
 
-func (*User) TableName() string {
+func (*Users) TableName() string {
 	return "user"
 }
 
-func (*User) TableComment() string {
+func (*Users) TableComment() string {
 	return "用户表"
 }
 
 func test() {
-	var u User
+	var u Users
 	imageList := orm.List{
 		"https://www.image.com/1.jpg",
 		"https://www.image.com/1.jpg",
