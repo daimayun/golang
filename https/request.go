@@ -7,7 +7,7 @@ import (
 )
 
 // Request 执行请求
-func Request(method, url string, body io.Reader, headers ...map[string]string) (b []byte, err error) {
+func Request(method, url string, body io.Reader, headers ...map[string]string) (b []byte, code int, err error) {
 	var (
 		req *http.Request
 		res *http.Response
@@ -25,6 +25,7 @@ func Request(method, url string, body io.Reader, headers ...map[string]string) (
 	if err != nil {
 		return
 	}
+	code = res.StatusCode
 	defer res.Body.Close()
 	b, err = ioutil.ReadAll(res.Body)
 	return

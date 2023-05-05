@@ -13,7 +13,7 @@ import (
 )
 
 // PostJson post_json
-func PostJson(url, jsonString string, headers ...map[string]string) (b []byte, err error) {
+func PostJson(url, jsonString string, headers ...map[string]string) (b []byte, code int, err error) {
 	if len(headers) > 0 {
 		if _, ok := headers[0]["Content-Type"]; !ok {
 			headers[0]["Content-Type"] = "application/json"
@@ -25,7 +25,7 @@ func PostJson(url, jsonString string, headers ...map[string]string) (b []byte, e
 }
 
 // PostForm post_form
-func PostForm(url string, data url.Values, headers ...map[string]string) (b []byte, err error) {
+func PostForm(url string, data url.Values, headers ...map[string]string) (b []byte, code int, err error) {
 	if len(headers) > 0 {
 		if _, ok := headers[0]["Content-Type"]; !ok {
 			headers[0]["Content-Type"] = "application/x-www-form-urlencoded"
@@ -49,7 +49,7 @@ func PostFormByNotAttachedHeaders(url string, data url.Values) (b []byte, err er
 }
 
 // PostFileByByte 以二进制格式上传文件
-func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byte, err error) {
+func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byte, code int, err error) {
 	if len(headers) > 0 {
 		if _, ok := headers[0]["Content-Type"]; !ok {
 			headers[0]["Content-Type"] = "multipart/form-data"
@@ -62,8 +62,7 @@ func PostFileByByte(url, filePath string, headers ...map[string]string) (b []byt
 	if err != nil {
 		return
 	}
-	b, err = Request(http.MethodPost, url, bytes.NewReader(fileByte), headers...)
-	return
+	return Request(http.MethodPost, url, bytes.NewReader(fileByte), headers...)
 }
 
 // 执行文件操作处理
@@ -86,7 +85,7 @@ func execFileHandle(fileKey, filePath string, writer *multipart.Writer) (err err
 }
 
 // PostFormWithFiles 通过form表单提交数据并上传文件
-func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, err error) {
+func PostFormWithFiles(url string, fileData, paramData map[string]string, headers ...map[string]string) (b []byte, code int, err error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	for fileKey, filePath := range fileData {
