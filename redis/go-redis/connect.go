@@ -3,9 +3,13 @@ package go_redis
 import (
 	"context"
 	"crypto/tls"
-	"github.com/redis/go-redis/v9"
+	"fmt"
 	"net"
+	"runtime"
+	"strings"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type Options struct {
@@ -51,7 +55,7 @@ type Options struct {
 	CredentialsProvider func() (username string, password string)
 
 	// redis DB 数据库，默认为0
-	DB int
+	Database int
 
 	// 命令最大重试次数， 默认为3
 	MaxRetries int
@@ -140,8 +144,118 @@ type Options struct {
 
 type Option func(options *Options)
 
-func WithAddr(Addr string) Option {
-	return func(options *Options) {
-		//
+func (opt *Options) init() {
+	var addr string
+	if opt.Host == "" {
+		opt.Host = "localhost"
 	}
+	if opt.Port == 0 {
+		opt.Port = 6379
+	}
+	addr = fmt.Sprintf("%s:%d", opt.Host, opt.Port)
+	if opt.Network == "" {
+		if strings.HasPrefix(addr, "/") {
+			opt.Network = "unix"
+		} else {
+			opt.Network = "tcp"
+		}
+	}
+	if opt.DialTimeout == 0 {
+		opt.DialTimeout = 5 * time.Second
+	}
+	if opt.PoolSize == 0 {
+		opt.PoolSize = 10 * runtime.GOMAXPROCS(0)
+	}
+	switch opt.ReadTimeout {
+	case -2:
+		opt.ReadTimeout = -1
+	case -1:
+		opt.ReadTimeout = 0
+	case 0:
+		opt.ReadTimeout = 3 * time.Second
+	}
+	switch opt.WriteTimeout {
+	case -2:
+		opt.WriteTimeout = -1
+	case -1:
+		opt.WriteTimeout = 0
+	case 0:
+		opt.WriteTimeout = opt.ReadTimeout
+	}
+	if opt.PoolTimeout == 0 {
+		if opt.ReadTimeout > 0 {
+			opt.PoolTimeout = opt.ReadTimeout + time.Second
+		} else {
+			opt.PoolTimeout = 30 * time.Second
+		}
+	}
+	if opt.ConnMaxIdleTime == 0 {
+		opt.ConnMaxIdleTime = 30 * time.Minute
+	}
+
+	if opt.MaxRetries == -1 {
+		opt.MaxRetries = 0
+	} else if opt.MaxRetries == 0 {
+		opt.MaxRetries = 3
+	}
+	switch opt.MinRetryBackoff {
+	case -1:
+		opt.MinRetryBackoff = 0
+	case 0:
+		opt.MinRetryBackoff = 8 * time.Millisecond
+	}
+	switch opt.MaxRetryBackoff {
+	case -1:
+		opt.MaxRetryBackoff = 0
+	case 0:
+		opt.MaxRetryBackoff = 512 * time.Millisecond
+	}
+}
+
+func WithHost(host string) Option {
+	return func(options *Options) {
+		options.Host = host
+	}
+}
+
+func WithPort(port int) Option {
+	return func(options *Options) {
+		options.Port = port
+	}
+}
+
+func WithDatabase(database int) Option {
+	return func(options *Options) {
+		options.Database = database
+	}
+}
+
+func WithPassword(password string) Option {
+	return func(options *Options) {
+		options.Password = password
+	}
+}
+
+var Redis *redis.Client
+
+func NewRedis(options ...Option) (err error) {
+	newOptions := &Options{
+		Host:     "127.0.0.1",
+		Port:     6379,
+		Password: "", // no password set
+		Database: 0,  // use default DB
+	}
+	for _, option := range options {
+		option(newOptions)
+	}
+	Redis = redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", newOptions.Host, newOptions.Port),
+		Password: newOptions.Password,
+		DB:       newOptions.Database,
+	})
+	_, err = Redis.Ping(context.Background()).Result()
+	if err != nil {
+		panic(err)
+	}
+	return
 }
